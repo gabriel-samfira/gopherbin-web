@@ -1,0 +1,16 @@
+.Paste {
+    margin: 20px auto;
+    width: 90%;
+    font-size: 100%;
+    box-sizing: border-box;
+}
+
+.PasteInfo {
+    margin-bottom: 30px;
+}
+
+.PasteName {
+    font-size: 200%;
+    margin: 15px;
+    font-weight: bold;
+}

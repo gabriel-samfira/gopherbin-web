@@ -1,0 +1,48 @@
+.Input {
+    padding: 5px 10px;
+    /* width: 100%;
+    padding: 10px;
+    box-sizing: border-box; */
+}
+
+.Label {
+    /* font-weight: bold;
+    display: inline-block;
+    margin-bottom: 8px; */
+    display: inline-block;
+    padding-right: 10px;
+    width: auto;
+    color: #777777;
+}
+
+.InputElement {
+    outline: none;
+    border: 1px solid #ccc;
+    background-color: white;
+    font: inherit;
+    padding: 6px 10px;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.Checkbox {
+    outline: none;
+    border: 1px solid #ccc;
+    background-color: white;
+    font: inherit;
+    padding: 6px 10px;
+    display: inline-block;
+    /* width: 100%; */
+    box-sizing: border-box;
+}
+
+.InputElement:focus {
+    outline: none;
+    background-color: #ccc;
+}
+
+.Invalid {
+    border: 1px solid red;
+    background-color: salmon;
+}

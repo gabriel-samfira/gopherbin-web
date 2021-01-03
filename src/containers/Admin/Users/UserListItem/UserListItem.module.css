@@ -1,0 +1,25 @@
+.UserListItem {
+    flex: 0 100%;
+    padding: 4px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding-right: 8px;
+    padding-left: 8px;
+    border: 2px solid rgba(194, 195, 197, 0.767);
+    margin-bottom: 16px;
+    transition: border .4s;
+}
+
+.UserListItem:hover {
+    border: 2px solid rgb(122, 181, 248);
+}
+
+@media (min-width: 600px) {
+    .UserListItem {
+        flex: 0 0 calc(50% - 8px);
+    }
+}
+
+.UserListItem:hover {
+    cursor: pointer;
+}

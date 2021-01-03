@@ -1,0 +1,7 @@
+.ace_gutter {
+    z-index: inherit;
+}
+
+.ace_hidden-cursors {
+    opacity: 0;
+}

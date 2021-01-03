@@ -1,0 +1,35 @@
+.UserProfileContainer {
+    max-width: 70%;
+    margin: auto;
+    /* border: 2px solid grey; */
+}
+
+.ProfileHeader {
+    margin-bottom: 60px;
+}
+
+.PasswordReset {
+    padding: 10px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    border: 2px solid rgba(194, 195, 197, 0.767);
+    border-radius: 10px;
+}
+
+.DangerZone {
+    padding: 10px;
+    box-sizing: border-box;
+    border: 2px solid rgb(248, 80, 80);
+    border-radius: 10px;
+}
+
+.DangerTitle {
+    font-weight: bold;
+    font-size: 150%;
+    color: #944317;
+}
+
+.HighlightetdID {
+    font-weight: bold;
+    color: #944317;
+}

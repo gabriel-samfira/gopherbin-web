@@ -1,0 +1,13 @@
+.NewUserContainer {
+    width: 70%;
+    margin: auto;
+}
+
+.Title {
+    padding: 5px 10px;
+    font-size: 200%;
+}
+
+.CallToAction {
+    padding-left: 5px;
+}

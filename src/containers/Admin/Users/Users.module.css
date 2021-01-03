@@ -1,0 +1,22 @@
+.AdminUserPage {
+    width: 90%;
+    margin: auto;
+    display: flex;
+    flex-flow: column;
+}
+
+.CreateUserButton {
+    width: 70%;
+    margin: auto;
+}
+
+.UsersContainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 70%;
+    margin: auto;
+    /* border: 2px solid rgba(194, 195, 197, 0.767); */
+    /* padding: 16px; */
+    box-sizing: border-box;
+    justify-content: space-between;
+}

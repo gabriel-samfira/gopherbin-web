@@ -1,0 +1,38 @@
+.NavigationItems {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    height: 100%;
+}
+
+.MarginRightAuto {
+    margin-right: auto!important;
+}
+
+.MarginLeftAuto {
+    margin-left: auto!important;
+}
+
+/* .NavigationItems li:last-child {
+    margin-left: auto;
+}
+
+.NavigationItems .AdminLink {
+    margin-left: auto;
+} */
+
+@media screen and (min-width: 600px) {
+    .NavigationItems {
+        margin: 0;
+        flex-flow: row;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+    
+}

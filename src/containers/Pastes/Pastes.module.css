@@ -1,0 +1,37 @@
+.Pagination {
+    margin: auto;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    text-align: center;
+}
+
+.Pagination span {
+    font-size: 100%;
+    display: inline-block;
+    min-width: 32px;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    transition: border .5s;
+}
+
+.Pagination span:hover {
+    border: 1px solid rgba(161, 148, 148, 0.822);
+    cursor: pointer;
+}
+
+span.PaginationDisabled {
+    cursor: default;
+    color: rgba(128, 128, 128, 0.671);
+    border: 1px solid transparent;
+}
+
+span.PaginationDisabled:hover{
+    cursor: default;
+    border: 1px solid transparent;
+}
+
+.PastesContainer {
+    margin-left: calc(100vw - 100%);
+}

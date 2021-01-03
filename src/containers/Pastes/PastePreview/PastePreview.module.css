@@ -1,0 +1,126 @@
+.PastePreview {
+    width: 460px;
+    box-sizing: border-box;
+    margin: auto;
+    margin-bottom: 20px;
+    border: 2px solid rgba(194, 195, 197, 0.767);
+    border-radius: 10px;
+    padding: 15px;
+    transition: transform .5s 0s, opacity .25s 0s;
+    transform: translateX(0);
+    opacity: 1;
+}
+
+@media (min-width: 600px) {
+    .PastePreview {
+        width: 580px;
+    }
+}
+
+@media (min-width: 800px) {
+    .PastePreview {
+        width: 780px;
+    }
+}
+
+@media (min-width: 1000px) {
+    .PastePreview {
+        width: 980px;
+    }
+}
+
+@media (min-width: 1300px) {
+    .PastePreview {
+        width: 1280px;
+    }
+}
+
+
+.PastePreview .PastePreviewDelete {
+    transform: translateX(100vw);
+    opacity: 0;
+}
+
+.PastePreviewSnippet {
+    font-size: 90%;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+.PreviewCover {
+    width: 100%;
+    height: 100%;
+    /* padding-top: 10px; */@media (min-width: 1000px) {
+    .PastePreview {
+        width: 980px;
+    }
+}
+    border: 2px solid rgba(194, 195, 197, 0.767);
+    border-radius: 5px;
+    box-sizing: border-box;
+    position: absolute;
+    cursor: pointer;
+    background-color: rgba(255,255,255,255, 0);
+    z-index: 1;
+    transition: border .2s;
+}
+
+.PreviewCover:hover {
+    border: 2px solid rgb(122, 181, 248);
+}
+
+.PasteInfoContainer {
+    padding-bottom: 10px;
+}
+
+.PreviewCover:hover {
+    cursor: pointer;
+}
+
+.TitleContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.PasteTitle {
+    font-size: 150%;
+    display: inline-block;
+}
+
+.PasteTitle:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.PasteInfo {
+    display: block;
+    font-size: 80%;
+    color: grey;
+}
+
+.PasteDescription {
+    display: block;
+    font-size: 95%;
+    color: grey;
+}
+
+.PasteInfo.Expires {
+    color: rgb(248, 80, 80);
+}
+
+.PasteDeleteIcon {
+    display: inline-block;
+    min-width: 32px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    transition: color .2s, border .2s;
+    /* align-content:; */
+    /* width: 100%; */
+}
+
+.PasteDeleteIcon:hover {
+    color: rgb(248, 80, 80);
+    border: 1px solid rgb(248, 80, 80);
+}
