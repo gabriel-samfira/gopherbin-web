@@ -47,7 +47,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.PASTE_GET_SUCCESS:
             return pasteGetSuccess(newState, action);
         case actionTypes.PASTE_GET_FAIL:
-            return pasteGetFail(state, action);
+            return pasteGetFail(newState, action);
         default:
             return state;
     }

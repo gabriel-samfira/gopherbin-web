@@ -40,6 +40,7 @@ class Paste extends Component {
         } else {
             this.props.onInitPasteState()
             this.props.onGetPaste(pasteID, this.props.token)
+            this.props.onSetAuthRedirect("/")
         }
     }
 
@@ -52,9 +53,10 @@ class Paste extends Component {
     }
 
     render() {
+        console.log(this.props.allState)
         let contents = <Spinner />
-        if (this.props.error) {
-            contents = <p>{this.props.error.message}</p>
+        if (this.props.allState.error) {
+            contents = <p>{this.props.allState.error.response.data.details}</p>
         } else if (this.props.pasteData !== null) {
             const pasteContents = atob(this.props.pasteData.data)
             const syntax = this.props.pasteData.language
@@ -120,6 +122,7 @@ const mapStateToProps = state => {
         pasteID: state.getPaste.pasteID,
         pasteData: state.getPaste.pasteData,
         error: state.getPaste.error,
+        allState: state.getPaste,
         loading: state.getPaste.loading,
         isAuthenticated: state.auth.token !== null,
         token: state.auth.token

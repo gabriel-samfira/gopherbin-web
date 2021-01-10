@@ -1,6 +1,12 @@
 import * as actionTypes from './actionTypes';
 import * as urls from './urls';
 
+import { initUserCreateState } from './adminUserCreate';
+import { initUserGetState } from './adminUserGet';
+import { initUserListState } from './adminUsers';
+import { initPasteState } from './paste';
+import { initPasteGetState, initPasteListState } from './pasteView';
+
 import axios from '../../axios';
 import jwt_decode from "jwt-decode";
 
@@ -35,10 +41,22 @@ export const authFail = (error) => {
     }
 }
 
-export const logout = () => {
+export const innerLogout = () => {
     localStorage.removeItem('token')
     return {
         type: actionTypes.AUTH_LOGOUT
+    }
+}
+
+export const logout = () => {
+    return dispatch => {
+        dispatch(innerLogout());
+        dispatch(initUserCreateState())
+        dispatch(initUserGetState())
+        dispatch(initUserListState())
+        dispatch(initPasteState())
+        dispatch(initPasteGetState())
+        dispatch(initPasteListState())
     }
 }
 
