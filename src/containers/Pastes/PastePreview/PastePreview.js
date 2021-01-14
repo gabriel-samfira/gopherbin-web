@@ -9,6 +9,7 @@ import { Trash } from 'react-bootstrap-icons';
 
 import { defaultEditorTheme } from '../pasteConstants';
 import { resolveSyntax } from '../pasteConstants';
+import { decode } from 'js-base64';
 
 import classes from './PastePreview.module.css';
 
@@ -20,7 +21,7 @@ class PastePreview extends Component {
     }
 
     render() {
-        let contents = atob(this.props.pasteData.preview)
+        let contents = decode(this.props.pasteData.preview)
         let contentsSplit = contents.split("\n")
         if (contentsSplit.length > 10) {
             contents = contentsSplit.splice(0, 10).join("\n").trimRight("\n")

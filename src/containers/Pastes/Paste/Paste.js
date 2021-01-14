@@ -13,7 +13,9 @@ import classes from './Paste.module.css';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import { defaultEditorTheme } from '../pasteConstants';
 import Moment from 'react-moment';
-import { Button, Tooltip, OverlayTrigger, Overlay } from 'react-bootstrap';
+import { Button, Tooltip, Overlay } from 'react-bootstrap';
+import { decode } from 'js-base64';
+
 
 
 class Paste extends Component {
@@ -44,21 +46,12 @@ class Paste extends Component {
         }
     }
 
-    renderTooltip = (props) => {
-        return (
-            <Tooltip id="button-tooltip" {...props}>
-                Copied!
-            </Tooltip>
-        );
-    }
-
     render() {
-        console.log(this.props.allState)
         let contents = <Spinner />
         if (this.props.allState.error) {
             contents = <p>{this.props.allState.error.response.data.details}</p>
         } else if (this.props.pasteData !== null) {
-            const pasteContents = atob(this.props.pasteData.data)
+            const pasteContents = decode(this.props.pasteData.data)
             const syntax = this.props.pasteData.language
             contents = (
                 <div className={classes.Paste}>
@@ -69,7 +62,7 @@ class Paste extends Component {
                             () => {
                                 copy(pasteContents)
                                 this.toggleTooltip()
-                                setTimeout(this.toggleTooltip, 2000)
+                                setTimeout(this.toggleTooltip, 1000)
                             }
                         }>
                             Copy

@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import * as urls from './urls';
+import { encode } from 'js-base64';
 
 import axios from '../../axios';
 
@@ -43,7 +44,7 @@ export const createPaste = (pasteData, token) => {
             expires: pasteData.expires,
             public: pasteData.isPublic,
             language: pasteData.lang,
-            data: btoa(pasteData.data)
+            data: encode(pasteData.data)
         }
 
         axios.post(urls.pasteURL, payload, config)
