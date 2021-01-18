@@ -3,6 +3,7 @@ import { cloneDeep } from 'lodash';
 
 let initialState = {
     pasteID: null,
+    public: false,
     error: null,
     loading: false
 };
@@ -15,7 +16,8 @@ const pasteAddStart = (state, action) => {
 
 const pasteAddSuccess = (state, action) => {
     state.loading = false
-    state.pasteID = action.pasteID
+    state.pasteID = action.pasteData.paste_id
+    state.public = action.pasteData.public
     state.error = null
     return state
 }
@@ -28,6 +30,7 @@ const pasteAddFail = (state, action) => {
 
 const pasteAddReset = (state, action) => {
     state.pasteID = null;
+    state.public = false;
     state.loading = false;
     state.error = null;
     return state

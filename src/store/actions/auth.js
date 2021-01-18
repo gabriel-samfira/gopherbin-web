@@ -5,7 +5,10 @@ import { initUserCreateState } from './adminUserCreate';
 import { initUserGetState } from './adminUserGet';
 import { initUserListState } from './adminUsers';
 import { initPasteState } from './paste';
-import { initPasteGetState, initPasteListState } from './pasteView';
+import {
+    initPasteGetState,
+    initPasteListState,
+    initPublicPasteGetState } from './pasteView';
 
 import axios from '../../axios';
 import jwt_decode from "jwt-decode";
@@ -56,6 +59,7 @@ export const logout = () => {
         dispatch(initUserListState())
         dispatch(initPasteState())
         dispatch(initPasteGetState())
+        dispatch(initPublicPasteGetState())
         dispatch(initPasteListState())
     }
 }

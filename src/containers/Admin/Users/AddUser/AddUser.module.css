@@ -1,6 +1,22 @@
 .NewUserContainer {
-    width: 70%;
+    padding: 15px;
+    width: 400px;
     margin: auto;
+    border: 1px solid rgba(194, 195, 197, 0.767);
+    box-shadow: 4px 4px 4px 4px rgba(194, 195, 197, 0.767);
+    border-radius: 10px;
+}
+
+@media screen and (min-width: 600px) {
+    .NewUserContainer {
+        width: 590px;
+    }
+}
+
+@media screen and (min-width: 800px) {
+    .NewUserContainer {
+        width: 790px;
+    }
 }
 
 .Title {

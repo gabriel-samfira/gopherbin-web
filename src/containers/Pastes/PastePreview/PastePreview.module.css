@@ -81,6 +81,7 @@
 .TitleContainer {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .PasteTitle {
@@ -123,4 +124,25 @@
 .PasteDeleteIcon:hover {
     color: rgb(248, 80, 80);
     border: 1px solid rgb(248, 80, 80);
+}
+
+.PasteLabel {
+    display: inline-block;
+    padding: 2px 8px;
+    margin-left: 10px;
+    font-size: 80%;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.PasteLabelPublic {
+    color:rgba(189, 44, 124, 1);
+    border-color: rgba(189, 44, 124, 1);
+}
+
+.PasteLabelSecret {
+    color:rgb(108, 199, 172);
+    border-color: rgb(108, 199, 172);
 }

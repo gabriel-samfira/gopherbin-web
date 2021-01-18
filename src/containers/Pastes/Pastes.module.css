@@ -1,9 +1,18 @@
 .Pagination {
     margin: auto;
+    margin-bottom: 20px;
     display: inline-block;
     box-sizing: border-box;
     width: 100%;
     text-align: center;
+}
+
+.NoPastes {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
 }
 
 .Pagination span {

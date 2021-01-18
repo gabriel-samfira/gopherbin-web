@@ -14,10 +14,14 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import authReducer from './store/reducers/auth';
 import addPasteReducer from './store/reducers/paste';
 import getPasteReducer from './store/reducers/pasteGet';
+import getPublicPasteReducer from './store/reducers/publicPasteGet';
 import listPasteReducer from './store/reducers/pasteList';
 import adminUsersReducer from './store/reducers/adminUsers';
 import adminUserCreateReducer from './store/reducers/adminUserCreate';
 import adminUserGetReducer from './store/reducers/adminUserGet';
+
+import axios from './axios';
+import { logout } from './store/actions/index';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -25,6 +29,7 @@ const rootReducer = combineReducers({
     auth: authReducer,
     addPaste: addPasteReducer,
     getPaste: getPasteReducer,
+    getPublicPaste: getPublicPasteReducer,
     listPastes: listPasteReducer,
     users: adminUsersReducer,
     userCreate: adminUserCreateReducer,
@@ -36,6 +41,29 @@ const store = createStore(
     composeEnhancers(
         applyMiddleware(thunk)
     ))
+
+/** Intercept any unauthorized request.
+* dispatch logout action accordingly **/
+const UNAUTHORIZED = 401;
+const CONFLICT = 409;
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    let msg = ""
+    if (error.response.data !== undefined) {
+        msg = error.response.data.error
+    }
+    const {status} = error.response;
+    if (status === UNAUTHORIZED) {
+        store.dispatch(logout());
+    }
+
+    if (status == CONFLICT && msg === "init_required") {
+        store.dispatch(logout());
+    }
+   return Promise.reject(error);
+ }
+);
 
 const app = (
     <Provider store={store}>

@@ -78,6 +78,47 @@ export const getPaste = (pasteID, token) => {
     }
 }
 
+export const initPublicPasteGetState = () => {
+    return {
+        type: actionTypes.PUB_PASTE_GET_RESET
+    }
+}
+
+export const publicPasteGetStart = () => {
+    return {
+        type: actionTypes.PUB_PASTE_GET_START
+    }
+}
+
+export const publicPasteGetSuccess = (pasteData) => {
+    return {
+        type: actionTypes.PUB_PASTE_GET_SUCCESS,
+        pasteData: pasteData
+    }
+}
+
+export const publicPasteGetFail = (error) => {
+    return {
+        type: actionTypes.PUB_PASTE_GET_FAIL,
+        error: error
+    }
+}
+
+export const getPublicPaste = (pasteID) => {
+    return dispatch => {
+        dispatch(publicPasteGetStart());
+        
+        axios.get(urls.publicPasteURL + "/" + pasteID)
+            .then(response => {
+                dispatch(publicPasteGetSuccess(response.data));
+                return response;
+            })
+            .catch(error => {
+                dispatch(publicPasteGetFail(error))
+            });
+    }
+}
+
 
 export const listPastes = (page, maxResults, token) => {
     return dispatch => {

@@ -10,7 +10,8 @@ import classes from './AddUser.module.css'
 
 import Input from '../../../../components/UI/Input/Input';
 import Spinner from '../../../../components/UI/Spinner/Spinner';
-import Button from '../../../../components/UI/Button/Button';
+
+import { Button } from 'react-bootstrap';
 
 
 class NewUser extends Component {
@@ -175,6 +176,10 @@ class NewUser extends Component {
     }
 
     render() {
+        if (!this.props.isAuthenticated) {
+            return <Redirect to="/login" />
+        }
+
         if (this.state.isUnauthorized) {
             return <h1>Unauthorized</h1>
         }
@@ -230,7 +235,10 @@ class NewUser extends Component {
                         }
                     </div>
                     <div className={classes.CallToAction}>
-                        <Button btnType="Success" disabled={!canSubmit} clicked={this.submitHandler}>Submit</Button>
+                        <Button
+                            variant="primary"
+                            disabled={!canSubmit}
+                            onClick={this.submitHandler}>Submit</Button>
                     </div>
                 </div>
             );

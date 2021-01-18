@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Button } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
 
 import *  as actions from '../../../store/actions/index';
 import Spinner from '../../../components/UI/Spinner/Spinner';
-import Button from '../../../components/UI/Button/Button';
 import UserListItem from './UserListItem/UserListItem';
 
 import classes from './Users.module.css';
@@ -37,6 +38,10 @@ class Users extends Component {
     }
 
     render () {
+        if (!this.props.isAuthenticated) {
+            return <Redirect to="/login" />
+        }
+
         let contents = <Spinner />
         if (this.props.error) {
             contents = <p>{this.props.error.message}</p>
@@ -63,7 +68,12 @@ class Users extends Component {
             contents = (
                 <div className={classes.AdminUserPage}>
                     <div className={classes.CreateUserButton}>
-                        <Button btnType="Success" clicked={this.onCreateUserHandler}>Create user</Button>
+                    <div style={{marginBottom: "20px"}}>
+                        <Button
+                            variant="primary"
+                            size="lg"
+                            onClick={this.onCreateUserHandler}>Create new user</Button>
+                    </div>
                     </div>
                     <div className={classes.UsersContainer}>
                         {pagination}

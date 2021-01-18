@@ -4,14 +4,13 @@ import { cloneDeep } from 'lodash';
 
 import { checkValidity } from '../../utils/utils';
 import Input from '../../components/UI/Input/Input';
-import Button from '../../components/UI/Button/Button';
+import Spinner from '../../components/UI/Spinner/Spinner';
 import classes from './Auth.module.css';
 
 import *  as actions from '../../store/actions/index'
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-
-import Spinner from '../../components/UI/Spinner/Spinner';
+import { Button } from 'react-bootstrap';
 
 
 class Auth extends Component {
@@ -54,15 +53,6 @@ class Auth extends Component {
 
     componentDidMount() {
         let next = this.props.authRedirect ? this.props.authRedirect : "/";
-        // if (this.props.location.search) {
-        //     let searchParams = new URLSearchParams( this.props.location.search );
-        //     for ( let param of searchParams.entries() ) {
-        //         if (param[0] === "next") {
-        //             next = param[1];
-        //             break;
-        //         }
-        //     }
-        // }
         this.props.onSetAuthRedirect(next)
     }
 
@@ -117,7 +107,10 @@ class Auth extends Component {
                         }
                     )
                 }
-                <Button btnType="Success" disabled={!canSubmit}>Submit</Button>
+                <Button
+                    variant="primary"
+                    disabled={!canSubmit}
+                    onClick={this.submitHandler}>Submit</Button>
             </form>
         )
 

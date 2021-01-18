@@ -9,6 +9,8 @@ const navigationItems = (props) => {
     let adminLinks = null;
     let authLink = null;
 
+    // let publicLinks = (<NavigationItem link="/" exact>Home</NavigationItem>)
+
     if (props.isAuthenticated) {
         authLink = <NavigationItem link="/logout" exact>Logout</NavigationItem>
         guardedLinks = (
@@ -17,6 +19,8 @@ const navigationItems = (props) => {
                 <NavigationItem link="/p" exact>All pastes</NavigationItem>
             </React.Fragment>
         );
+    } else {
+        authLink = <NavigationItem link="/login" exact>Login</NavigationItem>
     }
 
     if (props.isAdmin) {
@@ -30,6 +34,7 @@ const navigationItems = (props) => {
     return (
         <React.Fragment>
             <ul className={[classes.NavigationItems, classes.MarginRightAuto].join(" ")}>
+                {/* {publicLinks} */}
                 {guardedLinks}
             </ul>
             <ul className={[classes.NavigationItems, classes.MarginLeftAuto].join(" ")}>

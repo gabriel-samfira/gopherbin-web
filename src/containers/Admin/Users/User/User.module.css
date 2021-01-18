@@ -8,6 +8,23 @@
     margin-bottom: 60px;
 }
 
+.PageTitle {
+    font-size: 160%;
+    font-weight: bold;
+}
+
+@media screen and (min-width: 800px) {
+    .PageTitle {
+        font-size: 170%;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .PageTitle {
+        font-size: 180%;
+    }
+}
+
 .PasswordReset {
     padding: 10px;
     margin-bottom: 20px;

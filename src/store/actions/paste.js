@@ -17,10 +17,10 @@ export const pasteAddStart = () => {
     }
 }
 
-export const pasteAddSuccess = (pasteID) => {
+export const pasteAddSuccess = (pasteData) => {
     return {
         type: actionTypes.PASTE_ADD_SUCCESS,
-        pasteID: pasteID
+        pasteData: pasteData
     }
 }
 
@@ -49,7 +49,7 @@ export const createPaste = (pasteData, token) => {
 
         axios.post(urls.pasteURL, payload, config)
             .then(response => {
-                dispatch(pasteAddSuccess(response.data.paste_id));
+                dispatch(pasteAddSuccess(response.data));
                 return response;
             })
             .catch(error => {

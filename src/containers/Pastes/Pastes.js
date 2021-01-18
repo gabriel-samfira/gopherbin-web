@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+
+import { Button } from 'react-bootstrap';
 
 import *  as actions from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
@@ -13,7 +16,8 @@ class Pastes extends Component {
 
     componentDidMount() {
         if (this.props.isAuthenticated) {
-            this.props.onInitPasteListState()
+            this.props.onInitPasteGetState()
+            this.props.onInitPublicPasteGetState()
             this.props.onListPastes(
                 this.props.page, this.props.maxResults, this.props.token)
         } else {
@@ -36,6 +40,10 @@ class Pastes extends Component {
     }
 
     render () {
+        if (!this.props.isAuthenticated) {
+            return <Redirect to="/login" />
+        }
+
         let contents = <Spinner />
         if (this.props.error) {
             contents = <p>{this.props.error.message}</p>
@@ -59,22 +67,30 @@ class Pastes extends Component {
                     </div>
                 )
             }
-            contents = (
-                <div className={classes.PastesContainer}>
-                    {pagination}
-                    {
-                        this.props.nestedPastes.map(
-                            paste => {
-                                return <PastePreview
-                                            pasteData={paste}
-                                            key={paste.paste_id}
-                                            onDelete={() => this.handleOnPasteDelete(paste.paste_id)}/>
-                            }
-                        )
-                    }
-                    {pagination}
-                </div>
-            );
+            if (this.props.nestedPastes.length) {
+                contents = (
+                    <div className={classes.PastesContainer}>
+                        {pagination}
+                        {
+                            this.props.nestedPastes.map(
+                                paste => {
+                                    return <PastePreview
+                                                pasteData={paste}
+                                                key={paste.paste_id}
+                                                onDelete={() => this.handleOnPasteDelete(paste.paste_id)}/>
+                                }
+                            )
+                        }
+                        {pagination}
+                    </div>
+                );
+            } else {
+                contents = (
+                    <div className={classes.NoPastes}>
+                        <Button variant="primary" size="lg" onClick={() => this.props.history.push("/")}>Create new paste</Button>
+                    </div>
+                );
+            }
         }
 
         return contents;
@@ -83,7 +99,8 @@ class Pastes extends Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitPasteListState: () => dispatch(actions.initPasteGetState()),
+        onInitPasteGetState: () => dispatch(actions.initPasteGetState()),
+        onInitPublicPasteGetState: () => dispatch(actions.initPublicPasteGetState()),
         onListPastes: (page, maxResults, token) => dispatch(actions.listPastes(page, maxResults, token)),
         onSetAuthRedirect: (path) => dispatch(actions.setAuthRedirectPath(path)),
         onPasteDelete: (pasteID, token) => dispatch(actions.deletePaste(pasteID, token))

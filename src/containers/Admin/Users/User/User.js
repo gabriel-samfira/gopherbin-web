@@ -4,12 +4,15 @@ import {cloneDeep} from 'lodash';
 import { Redirect } from 'react-router-dom';
 
 import Input from '../../../../components/UI/Input/Input';
-import Button from '../../../../components/UI/Button/Button';
+// import Button from '../../../../components/UI/Button/Button';
 import Spinner from '../../../../components/UI/Spinner/Spinner';
 
 import { checkValidity } from '../../../../utils/utils';
 import *  as actions from '../../../../store/actions/index';
 import classes from './User.module.css';
+
+import { Button } from 'react-bootstrap';
+
 
 class User extends Component {
 
@@ -115,6 +118,10 @@ class User extends Component {
     }
 
     render() {
+        if (!this.props.isAuthenticated) {
+            return <Redirect to="/login" />
+        }
+
         if (!this.props.userInfo || !this.props.userInfo.id) {
             const userURL = "/admin/users"
             return <Redirect to={userURL} />
@@ -140,7 +147,7 @@ class User extends Component {
             content = (
                 <div className={classes.UserProfileContainer}>
                     <div className={classes.ProfileHeader}>
-                        <h3>User profile for {this.props.userInfo.full_name} ({this.props.userInfo.email})</h3>
+                        <span className={classes.PageTitle}>User profile for {this.props.userInfo.full_name} ({this.props.userInfo.email})</span>
                     </div>
                     <div className={classes.PasswordReset}>
                         <p>Reset password</p>
@@ -162,7 +169,12 @@ class User extends Component {
                                 }
                             )
                         }
-                        <Button btnType="Success" clicked={this.submitHandler} disabled={!canSubmit}>Change Password</Button>
+                        <div style={{ marginTop: "10px", marginBottom: "5px"}}>
+                            <Button
+                                variant="primary"
+                                disabled={!canSubmit}
+                                onClick={this.submitHandler}>Change Password</Button>
+                        </div>
                     </div>
                     <div className={classes.DangerZone}>
                         <p className={classes.DangerTitle}>Danger Zone</p>
@@ -176,7 +188,12 @@ class User extends Component {
                                 invalid={!this.state.deleteUserForm.valid}
                                 touched={this.state.deleteUserForm.touched}
                             />
-                            <Button btnType="Danger" clicked={this.deleteUserSubmitHandler} disabled={!this.state.deleteUserForm.valid}>DELETE</Button>
+                            <div style={{ marginTop: "10px", marginBottom: "5px"}}>
+                                <Button
+                                    variant="danger"
+                                    disabled={!this.state.deleteUserForm.valid}
+                                    onClick={this.deleteUserSubmitHandler}>DELETE</Button>
+                            </div>
                         </div>
                     </div>
                 </div>

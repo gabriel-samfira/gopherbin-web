@@ -17,7 +17,9 @@ export {
     listPastes,
     pasteGetStart,
     pasteListStart,
-    deletePaste
+    deletePaste,
+    initPublicPasteGetState,
+    getPublicPaste
 } from './pasteView';
 
 export {
@@ -36,4 +38,5 @@ export {
 export {
     initUserCreateState,
     createUser
-} from './adminUserCreate'; 
+} from './adminUserCreate';
+

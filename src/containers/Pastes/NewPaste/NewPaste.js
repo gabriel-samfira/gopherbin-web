@@ -13,8 +13,9 @@ import { editorModes, defaultEditorTheme } from '../pasteConstants';
 
 import Input from '../../../components/UI/Input/Input';
 import Spinner from '../../../components/UI/Spinner/Spinner';
-import Button from '../../../components/UI/Button/Button';
+
 import AceEditor from "react-ace";
+import { Button } from 'react-bootstrap';
 
 import 'ace-builds/webpack-resolver';
 
@@ -154,14 +155,25 @@ class NewPaste extends Component {
     }
 
     componentDidMount () {
-        this.props.onInitPasteState()
+        if (this.props.isAuthenticated) {
+            this.props.onInitPasteState()
+        } else {
+            this.props.onSetAuthRedirect(this.props.match.url)
+            this.props.history.push('/login')
+        }
     }
 
     render() {
-        let contents = <Spinner />
+        if (!this.props.isAuthenticated) {
+            return <Redirect to="/login" />
+        }
 
+        let contents = <Spinner />
         if (this.props.pasteID !== null) {
-            const pasteURL = "/p/" + this.props.pasteID;
+            let pasteURL = "/p/" + this.props.pasteID;
+            if (this.props.isPublic === true) {
+                pasteURL = "/public/p/" + this.props.pasteID;
+            }
             return <Redirect to={pasteURL} />
         }
 
@@ -220,7 +232,9 @@ class NewPaste extends Component {
                             }}
                         />
                     </div>
-                    <Button btnType="Success" disabled={!canSubmit} clicked={this.submitHandler}>Submit</Button>
+                    <div style={{marginTop: "20px"}}>
+                        <Button variant="primary" disabled={!canSubmit} onClick={this.submitHandler}>Submit</Button>
+                    </div>
                 </div>
             );
         }
@@ -232,7 +246,8 @@ class NewPaste extends Component {
 const mapDispatchToProps = dispatch => {
     return {
         onInitPasteState: () => dispatch(actions.initPasteState()),
-        onCreatePaste: (pasteData, token) => dispatch(actions.createPaste(pasteData, token))
+        onCreatePaste: (pasteData, token) => dispatch(actions.createPaste(pasteData, token)),
+        onSetAuthRedirect: (path) => dispatch(actions.setAuthRedirectPath(path)),
     }
 }
 
@@ -241,7 +256,9 @@ const mapStateToProps = state => {
         loading: state.addPaste.loading,
         error: state.addPaste.error,
         pasteID: state.addPaste.pasteID,
-        token: state.auth.token
+        isPublic: state.addPaste.public,
+        token: state.auth.token,
+        isAuthenticated: state.auth.token !== null
     }
 }
 

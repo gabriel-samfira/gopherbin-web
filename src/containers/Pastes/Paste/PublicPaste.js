@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 
 import copy from "copy-to-clipboard";
 
@@ -18,8 +17,9 @@ import { Button, Tooltip, Overlay } from 'react-bootstrap';
 import { decode } from 'js-base64';
 
 
-class Paste extends Component {
 
+class PublicPaste extends Component {
+    // Deduplicate this
     constructor(props) {
         super(props);
 
@@ -36,21 +36,12 @@ class Paste extends Component {
     componentDidMount() {
         this.props.onInitPasteGetState()
         let pasteID = this.props.match.params.id
-        if (!this.props.isAuthenticated) {
-            this.props.onSetAuthRedirect(this.props.match.url)
-            this.props.history.push('/login')
-        } else {
-            this.props.onInitPasteState()
-            this.props.onGetPaste(pasteID, this.props.token)
-            this.props.onSetAuthRedirect("/")
-        }
+        this.props.onInitPasteState()
+        this.props.onGetPaste(pasteID)
+        this.props.onSetAuthRedirect("/")
     }
 
     render() {
-        if (!this.props.isAuthenticated) {
-            return <Redirect to="/login" />
-        }
-
         let contents = <Spinner />
         if (this.props.allState.error) {
             contents = <p>{this.props.allState.error.response.data.details}</p>
@@ -86,7 +77,6 @@ class Paste extends Component {
                         width="100%"
                         height="inherit"
                         fontSize="inherit"
-                        wrapEnabled={true}
                         value={pasteContents}
                         showPrintMargin={false}
                         highlightActiveLine={false}
@@ -108,23 +98,21 @@ class Paste extends Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitPasteGetState: () => dispatch(actions.initPasteGetState()),
-        onGetPaste: (pasteID, token) => dispatch(actions.getPaste(pasteID, token)),
-        onSetAuthRedirect: (path) => dispatch(actions.setAuthRedirectPath(path)),
-        onInitPasteState: () => dispatch(actions.initPasteState())
+        onInitPasteGetState: () => dispatch(actions.initPublicPasteGetState()),
+        onGetPaste: (pasteID) => dispatch(actions.getPublicPaste(pasteID)),
+        onInitPasteState: () => dispatch(actions.initPasteState()),
+        onSetAuthRedirect: (path) => dispatch(actions.setAuthRedirectPath(path))
     }
 }
 
 const mapStateToProps = state => {
     return {
-        pasteID: state.getPaste.pasteID,
-        pasteData: state.getPaste.pasteData,
-        error: state.getPaste.error,
-        allState: state.getPaste,
-        loading: state.getPaste.loading,
-        isAuthenticated: state.auth.token !== null,
-        token: state.auth.token
+        pasteID: state.getPublicPaste.pasteID,
+        pasteData: state.getPublicPaste.pasteData,
+        error: state.getPublicPaste.error,
+        allState: state.getPublicPaste,
+        loading: state.getPublicPaste.loading
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Paste);
+export default connect(mapStateToProps, mapDispatchToProps)(PublicPaste);
