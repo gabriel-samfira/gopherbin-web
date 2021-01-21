@@ -58,7 +58,7 @@ axios.interceptors.response.use(
         store.dispatch(logout());
     }
 
-    if (status == CONFLICT && msg === "init_required") {
+    if (status === CONFLICT && msg === "init_required") {
         store.dispatch(logout());
     }
    return Promise.reject(error);

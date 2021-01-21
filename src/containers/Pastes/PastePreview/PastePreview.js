@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import AceEditor from "react-ace";
 import 'ace-builds/webpack-resolver';
 
-import { Trash, Globe } from 'react-bootstrap-icons';
+import { Trash } from 'react-bootstrap-icons';
 
 import { defaultEditorTheme } from '../pasteConstants';
 import { resolveSyntax } from '../pasteConstants';
