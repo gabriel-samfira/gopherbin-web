@@ -210,7 +210,7 @@ class NewPaste extends Component {
                         )
                     }
                 
-                    <div style={{width: "100%", height: "500px", border: '1px solid #ccc', borderRadius: "5px", overflow: "hidden"}}>
+                    <div className={classes.EditorContainer}>
                         <AceEditor
                             mode={this.state.pasteForm.syntax.value}
                             theme={this.state.editor.theme}

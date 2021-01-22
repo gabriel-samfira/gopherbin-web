@@ -1,7 +1,31 @@
 .UserProfileContainer {
-    max-width: 70%;
+    width: 90%;
     margin: auto;
     /* border: 2px solid grey; */
+}
+
+@media screen and (min-width: 600px) {
+    .UserProfileContainer {
+        width: 590px;
+    }
+}
+
+@media screen and (min-width: 800px) {
+    .UserProfileContainer {
+        width: 790px;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .UserProfileContainer{
+        width: 990px;
+    }
+}
+
+@media screen and (min-width: 1300px) {
+    .UserProfileContainer{
+        width: 1280px;
+    }
 }
 
 .ProfileHeader {

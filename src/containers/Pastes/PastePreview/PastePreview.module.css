@@ -1,5 +1,5 @@
 .PastePreview {
-    width: 460px;
+    width: 95%;
     box-sizing: border-box;
     margin: auto;
     margin-bottom: 20px;
@@ -9,6 +9,12 @@
     transition: transform .5s 0s, opacity .25s 0s;
     transform: translateX(0);
     opacity: 1;
+}
+
+@media (min-width: 480px) {
+    .PastePreview {
+        width: 450px;
+    }
 }
 
 @media (min-width: 600px) {

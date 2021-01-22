@@ -1,5 +1,5 @@
 .AdminUserPage {
-    width: 90%;
+    width: 95%;
     margin: auto;
     display: flex;
     flex-flow: column;
@@ -13,7 +13,7 @@
 .UsersContainer {
     display: flex;
     flex-wrap: wrap;
-    width: 70%;
+    width: 85%;
     margin: auto;
     /* border: 2px solid rgba(194, 195, 197, 0.767); */
     /* padding: 16px; */
