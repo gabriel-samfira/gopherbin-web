@@ -75,7 +75,7 @@ class PublicPaste extends Component {
                         theme={defaultEditorTheme}
                         name="paste-data"
                         width="100%"
-                        height="inherit"
+                        //height="inherit"
                         fontSize="inherit"
                         value={pasteContents}
                         showPrintMargin={false}

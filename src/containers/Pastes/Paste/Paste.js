@@ -84,7 +84,7 @@ class Paste extends Component {
                         theme={defaultEditorTheme}
                         name="paste-data"
                         width="100%"
-                        height="inherit"
+                        //height="inherit"
                         fontSize="inherit"
                         wrapEnabled={true}
                         value={pasteContents}
