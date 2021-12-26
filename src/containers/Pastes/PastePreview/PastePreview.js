@@ -72,7 +72,6 @@ class PastePreview extends Component {
                         theme={defaultEditorTheme}
                         name="paste-preview"
                         width="100%"
-                        //height="inherit"
                         fontSize="inherit"
                         value={contents}
                         showPrintMargin={false}

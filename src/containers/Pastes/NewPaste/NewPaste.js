@@ -233,7 +233,7 @@ class NewPaste extends Component {
                         />
                     </div>
                     <div style={{marginTop: "20px"}}>
-                        <Button variant="primary" disabled={!canSubmit} onClick={this.submitHandler}>Submit</Button>
+                        <Button type="submit" variant="primary" disabled={!canSubmit} onClick={this.submitHandler}>Submit</Button>
                     </div>
                 </div>
             );

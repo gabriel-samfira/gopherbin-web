@@ -111,7 +111,7 @@ class User extends Component {
     deleteUSerInputChangedHandler = (event) => {
         let newVal = event.target.value;
         let valid = false;
-        if (newVal && newVal === this.props.userInfo.id) {
+        if (newVal && newVal === this.props.userInfo.email) {
             valid = true
         }
         this.setState({deleteUserForm: {valid: valid, touched: true, value: newVal}})
@@ -179,7 +179,7 @@ class User extends Component {
                     <div className={classes.DangerZone}>
                         <p className={classes.DangerTitle}>Danger Zone</p>
                         <p>WARNING: This operation is permanent, and will delete the user and all pastes created by this user.</p>
-                        <p>To delete this user, type in <span className={classes.HighlightetdID}>{this.props.userInfo.id}</span> in the field bellow, and click the delete button.</p>
+                        <p>To delete this user, type in <span className={classes.HighlightetdID}>{this.props.userInfo.email}</span> in the field bellow, and click the delete button.</p>
                         <div className={classes.DeleteForm}>
                             <Input 
                                 changed={(event) => this.deleteUSerInputChangedHandler(event)}

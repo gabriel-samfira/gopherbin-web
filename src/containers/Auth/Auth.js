@@ -108,6 +108,7 @@ class Auth extends Component {
                     )
                 }
                 <Button
+                    type="submit"
                     variant="primary"
                     disabled={!canSubmit}
                     onClick={this.submitHandler}>Submit</Button>
@@ -121,8 +122,12 @@ class Auth extends Component {
         let errorMsg = null;
 
         if (this.props.error) {
-            errorMsg = <p>{this.props.error.message}</p>
+            errorMsg = <p class={classes.HighlightedMessage}>{this.props.error.message}</p>
+            if (this.props.error.response && this.props.error.response.data.error === "init_required") {
+                errorMsg = <p class={classes.HighlightedMessage}>{this.props.error.response.data.details}</p>
+            }
         }
+        
 
         let title = <p>Welcome to Gopherbin</p>
 
