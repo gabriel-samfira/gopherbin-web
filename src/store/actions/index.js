@@ -19,7 +19,8 @@ export {
     pasteListStart,
     deletePaste,
     initPublicPasteGetState,
-    getPublicPaste
+    getPublicPaste,
+    updatePaste
 } from './pasteView';
 
 export {

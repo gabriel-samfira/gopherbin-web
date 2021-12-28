@@ -81,6 +81,42 @@ const pasteDeleteFail = (state, action) => {
     return state
 }
 
+const pasteUpdateStart = (state, action) => {
+    state.loading = true
+    return state
+}
+
+const pasteUpdateSuccess = (state, action) => {
+    if (state.pastes.pastes !== null && state.pastes.pastes !== undefined){
+        let newPastes = state.pastes.pastes.filter((paste) => {
+            if (paste.paste_id === action.pasteID) {
+                paste.public = action.pasteData.public
+            }
+            return paste
+        })
+        state.pastes.pastes = newPastes
+    }
+    state.error = null
+    state.loading = false
+    return state
+}
+
+const pasteUpdateFail = (state, action) => {
+    if (state.pastes.pastes !== null && state.pastes.pastes !== undefined){
+        let newPastes = state.pastes.pastes.filter((paste) => {
+            if (paste.paste_id === action.pasteID) {
+                paste.error = action.error
+            }
+            return paste
+        })
+        state.pastes.pastes = newPastes
+    }
+    state.error = action.error
+    state.loading = false
+    return state
+}
+
+
 const reducer = (state = initialState, action) => {
     let newState = cloneDeep(state);
     switch (action.type) {
@@ -98,6 +134,12 @@ const reducer = (state = initialState, action) => {
             return pasteDeleteSuccess(newState, action)
         case actionTypes.PASTE_DELETE_FAIL:
             return pasteDeleteFail(newState, action)
+        case actionTypes.PASTE_UPDATE_START:
+            return pasteUpdateStart(newState, action)
+        case actionTypes.PASTE_UPDATE_SUCCESS:
+            return pasteUpdateSuccess(newState, action)
+        case actionTypes.PASTE_UPDATE_FAIL:
+            return pasteUpdateFail(newState, action)
         default:
             return state;
     }

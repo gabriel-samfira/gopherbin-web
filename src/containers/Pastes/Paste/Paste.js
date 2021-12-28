@@ -73,7 +73,7 @@ class Paste extends Component {
                         </Button>
                         <Overlay target={this.target.current} show={this.state.showTooltip} placement="top">
                             {(props) => (
-                                <Tooltip id="overlay-example" {...props}>
+                                <Tooltip id="copy-overlay" {...props}>
                                     Copied!
                                 </Tooltip>
                             )}

@@ -178,6 +178,28 @@ export const pasteDeleteFail = (pasteID, error) => {
 }
 
 
+export const pasteUpdateStart = () => {
+    return {
+        type: actionTypes.PASTE_UPDATE_START
+    }
+}
+
+export const pasteUpdateSuccess = (pasteID, pasteData) => {
+    return {
+        type: actionTypes.PASTE_UPDATE_SUCCESS,
+        pasteID: pasteID,
+        pasteData: pasteData
+    }
+}
+
+export const pasteUpdateFail = (pasteID, error) => {
+    return {
+        type: actionTypes.PASTE_UPDATE_FAIL,
+        pasteID: pasteID,
+        error: error
+    }
+}
+
 export const deletePaste = (pasteID, token) => {
     return dispatch => {
         dispatch(pasteDeleteStart());
@@ -193,6 +215,28 @@ export const deletePaste = (pasteID, token) => {
             })
             .catch(error => {
                 dispatch(pasteDeleteFail(pasteID, error))
+            });
+    }
+}
+
+export const updatePaste = (pasteID, pasteData, token) => {
+    return dispatch => {
+        dispatch(pasteUpdateStart());
+
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+
+        let payload = {
+            public: pasteData.public
+        }
+        axios.put(urls.pasteURL + "/" + pasteID, payload, config)
+            .then(response => {
+                dispatch(pasteUpdateSuccess(pasteID, response.data));
+                return response;
+            })
+            .catch(error => {
+                dispatch(pasteUpdateFail(pasteID, error))
             });
     }
 }

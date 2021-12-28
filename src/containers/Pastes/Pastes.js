@@ -39,6 +39,13 @@ class Pastes extends Component {
         this.props.onPasteDelete(pasteID, this.props.token)
     }
 
+    handleOnPasteUpdate = (pasteData) => {
+        let updateParams = {
+            public: !pasteData.public
+        }
+        this.props.onPasteUpdate(pasteData.paste_id, updateParams, this.props.token)
+    }
+
     render () {
         if (!this.props.isAuthenticated) {
             return <Redirect to="/login" />
@@ -77,7 +84,9 @@ class Pastes extends Component {
                                     return <PastePreview
                                                 pasteData={paste}
                                                 key={paste.paste_id}
-                                                onDelete={() => this.handleOnPasteDelete(paste.paste_id)}/>
+                                                onDelete={() => this.handleOnPasteDelete(paste.paste_id)}
+                                                onUpdatePaste={() => {this.handleOnPasteUpdate(paste);}}
+                                            />
                                 }
                             )
                         }
@@ -103,7 +112,8 @@ const mapDispatchToProps = dispatch => {
         onInitPublicPasteGetState: () => dispatch(actions.initPublicPasteGetState()),
         onListPastes: (page, maxResults, token) => dispatch(actions.listPastes(page, maxResults, token)),
         onSetAuthRedirect: (path) => dispatch(actions.setAuthRedirectPath(path)),
-        onPasteDelete: (pasteID, token) => dispatch(actions.deletePaste(pasteID, token))
+        onPasteDelete: (pasteID, token) => dispatch(actions.deletePaste(pasteID, token)),
+        onPasteUpdate: (pasteID, pasteData, token) => dispatch(actions.updatePaste(pasteID, pasteData, token))
     }
 }
 

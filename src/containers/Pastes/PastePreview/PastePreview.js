@@ -7,6 +7,8 @@ import 'ace-builds/webpack-resolver';
 
 import { Trash } from 'react-bootstrap-icons';
 
+import PrivacySlider from '../../../components/UI/PrivacySlider/PrivacySlider';
+
 import { defaultEditorTheme } from '../pasteConstants';
 import { resolveSyntax } from '../pasteConstants';
 import { decode } from 'js-base64';
@@ -28,7 +30,7 @@ class PastePreview extends Component {
         let contents = decode(this.props.pasteData.preview)
         let contentsSplit = contents.split("\n")
         if (contentsSplit.length > 10) {
-            contents = contentsSplit.splice(0, 10).join("\n").trimRight("\n")
+            contents = contentsSplit.splice(0, 10).join("\n").trimEnd("\n")
         }
 
         let expires = null;
@@ -44,21 +46,25 @@ class PastePreview extends Component {
             description = <span className={classes.PasteDescription}>{this.props.pasteData.description}</span>
         }
 
-        let pasteLabel = <span className={[classes.PasteLabel, classes.PasteLabelSecret].join(" ")}>secret</span>
-        if (this.props.pasteData.public === true) {
-            pasteLabel = <span className={[classes.PasteLabel, classes.PasteLabelPublic].join(" ")}>public</span>
-        }
-
+        let sliderKey = "slider" + this.props.pasteData.paste_id
         return (
             <div className={classes.PastePreview}>
                 <div className={classes.PasteInfoContainer}>
                     <div className={classes.TitleContainer}>
                         <div>
                             <span className={classes.PasteTitle} onClick={this.onClickHandler}>{this.props.pasteData.name}</span>
-                            {pasteLabel}
                         </div>
-                        <div className={classes.PasteDeleteIcon} onClick={this.props.onDelete}>
-                            <Trash />
+
+                        <div>
+                            <PrivacySlider
+                                key={sliderKey}
+                                value={this.props.pasteData.public}
+                                changed={this.props.onUpdatePaste}
+                            />
+
+                            <div className={classes.PasteDeleteIcon} onClick={this.props.onDelete}>
+                                <Trash />
+                            </div>
                         </div>
                     </div>
                     <span className={classes.PasteInfo}>Created <Moment fromNow>{this.props.pasteData.created_at}</Moment> </span>

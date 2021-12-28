@@ -13,6 +13,7 @@ import { editorModes, defaultEditorTheme } from '../pasteConstants';
 
 import Input from '../../../components/UI/Input/Input';
 import Spinner from '../../../components/UI/Spinner/Spinner';
+import PrivacySlider from '../../../components/UI/PrivacySlider/PrivacySlider';
 
 import AceEditor from "react-ace";
 import { Button } from 'react-bootstrap';
@@ -31,6 +32,7 @@ class NewPaste extends Component {
             theme: defaultEditorTheme,
             contents: ""
         },
+        isPublic: false,
         pasteForm: {
             title: {
                 elementType: 'input',
@@ -73,21 +75,17 @@ class NewPaste extends Component {
                 validation: {},
                 touched: false,
                 valid: true
-            },
-            public: {
-                elementType: 'checkbox',
-                elementConfig: {
-                    type: "checkbox",
-                    placeholder: "Public"
-                   
-                },
-                label: "Public",
-                value: false,
-                validation: {},
-                touched: false,
-                valid: false
             }
         }
+    }
+
+    toggleIsPublic = (event) => {
+        console.log(event.target);
+        this.setState(
+            (prevState) => {
+                return {isPublic: !prevState.isPublic};
+            }
+        )
     }
 
     inputChangedHandler = (event, id) => {
@@ -141,7 +139,7 @@ class NewPaste extends Component {
         event.preventDefault();
         let pasteData = {
             title: this.state.pasteForm.title.value,
-            isPublic: this.state.pasteForm.public.value,
+            isPublic: this.state.isPublic,
             lang: this.state.pasteForm.syntax.value,
             data: this.state.editor.contents
         }
@@ -209,7 +207,10 @@ class NewPaste extends Component {
                             }
                         )
                     }
-                
+                    <PrivacySlider
+                                changed={this.toggleIsPublic}
+                                value={this.state.isPublic}/>
+
                     <div className={classes.EditorContainer}>
                         <AceEditor
                             mode={this.state.pasteForm.syntax.value}
@@ -221,12 +222,8 @@ class NewPaste extends Component {
                             fontSize="100%"
                             value={this.state.editor.contents}
                             showPrintMargin={false}
-                            // showGutter={false}
                             highlightActiveLine={true}
                             setOptions={{
-                                // highlightActiveLine: false,
-                                // highlightGutterLine: false,
-                                // readOnly: true,
                                 showLineNumbers: true,
                                 tabSize: 4,
                             }}

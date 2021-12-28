@@ -57,11 +57,7 @@
 .PreviewCover {
     width: 100%;
     height: 100%;
-    /* padding-top: 10px; */@media (min-width: 1000px) {
-    .PastePreview {
-        width: 980px;
-    }
-}
+    /* padding-top: 10px; */
     border: 2px solid rgba(194, 195, 197, 0.767);
     border-radius: 5px;
     box-sizing: border-box;

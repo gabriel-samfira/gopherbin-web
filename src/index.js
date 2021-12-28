@@ -42,9 +42,6 @@ const store = createStore(
         applyMiddleware(thunk)
     ))
 
-/** Intercept any unauthorized request.
-* dispatch logout action accordingly **/
-const UNAUTHORIZED = 401;
 const CONFLICT = 409;
 axios.interceptors.response.use(
   response => response,
@@ -54,10 +51,8 @@ axios.interceptors.response.use(
         msg = error.response.data.error
     }
     const {status} = error.response;
-    if (status === UNAUTHORIZED) {
-        store.dispatch(logout());
-    }
 
+    // Gopherbin needs to be initialized.
     if (status === CONFLICT && msg === "init_required") {
         store.dispatch(logout());
     }
