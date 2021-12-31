@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap';
 
 import *  as actions from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Modal from '../../components/UI/Modal/Modal';
 import PastePreview from './PastePreview/PastePreview';
 
 import classes from './Pastes.module.css';
@@ -13,6 +14,10 @@ import './Pastes.css';
 
 
 class Pastes extends Component {
+
+    state = {
+        deletingPaste: null
+    }
 
     componentDidMount() {
         if (this.props.isAuthenticated) {
@@ -37,6 +42,7 @@ class Pastes extends Component {
 
     handleOnPasteDelete = (pasteID) => {
         this.props.onPasteDelete(pasteID, this.props.token)
+        this.setState({deletingPaste: null})
     }
 
     handleOnPasteUpdate = (pasteData) => {
@@ -44,6 +50,14 @@ class Pastes extends Component {
             public: !pasteData.public
         }
         this.props.onPasteUpdate(pasteData.paste_id, updateParams, this.props.token)
+    }
+
+    deleteCancelledHandler = () => {
+        this.setState({ deletingPaste: null });
+    }
+
+    onDeleteInitHandler = (pasteID) => {
+        this.setState({deletingPaste: pasteID})
     }
 
     render () {
@@ -84,7 +98,7 @@ class Pastes extends Component {
                                     return <PastePreview
                                                 pasteData={paste}
                                                 key={paste.paste_id}
-                                                onDelete={() => this.handleOnPasteDelete(paste.paste_id)}
+                                                onDelete={() => this.onDeleteInitHandler({pasteID: paste.paste_id, pasteName: paste.name})}
                                                 onUpdatePaste={() => {this.handleOnPasteUpdate(paste);}}
                                             />
                                 }
@@ -101,8 +115,27 @@ class Pastes extends Component {
                 );
             }
         }
+        let modal = null
+        if (this.state.deletingPaste !== null) {
+            modal = <Modal show={true} modalClosed={this.deleteCancelledHandler}>
+                <div className={classes.ConfirmDeleteContainer}>
+                    <p>Are you sure you want to delete <span className={classes.HighlightetdID}>{this.state.deletingPaste.pasteName}</span>?</p>
+                    <div className={classes.DeleteControls}>
+                        <div>
+                            <Button variant="outline-primary" onClick={this.deleteCancelledHandler}>CANCEL</Button>
+                        </div>
+                        <div>
+                            <Button variant="outline-danger" onClick={() => {this.handleOnPasteDelete(this.state.deletingPaste.pasteID)}}>DELETE</Button>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
+        }
 
-        return contents;
+        return <React.Fragment>
+            {modal}
+            {contents}
+        </React.Fragment>;
     }
 }
 

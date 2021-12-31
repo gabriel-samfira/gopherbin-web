@@ -44,3 +44,19 @@ span.PaginationDisabled:hover{
 .PastesContainer {
     margin-left: calc(100vw - 100%);
 }
+
+.ConfirmDeleteContainer {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.DeleteControls {
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+}
+
+.HighlightetdID {
+    font-weight: bold;
+    color: #ff0000;
+}
