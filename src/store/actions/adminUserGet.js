@@ -7,7 +7,9 @@ var JSONbigString = require('json-bigint')({ storeAsString: true });
 
 export const initUserGetState = () => {
     return {
-        type: actionTypes.USER_GET_RESET
+        type: actionTypes.USER_GET_RESET,
+        passwordUpdateError: null,
+        updateUserInfoError: null
     }
 }
 
@@ -66,11 +68,18 @@ const userUpdateSuccess = (userInfo) => {
     }
 }
 
-const userUpdateFail = (error) => {
-    return {
-        type: actionTypes.USER_UPDATE_FAIL,
-        error: error
+const userUpdateFail = (error, section = "password") => {
+    let actionPayload = {
+        type: actionTypes.USER_UPDATE_FAIL
     }
+    if (section === "password") {
+        actionPayload.passwordUpdateError = error
+    } else if (section === "updateUserInfo") {
+        actionPayload.updateUserInfoError = error
+    } else {
+        actionPayload.error = error
+    }
+    return actionPayload
 }
 
 export const adminUpdateUserPassword = (userId, password, token) => {
@@ -90,11 +99,39 @@ export const adminUpdateUserPassword = (userId, password, token) => {
         
         axios.put(urls.adminUsersURL + "/" + userId, payload, config)
             .then(response => {
-                dispatch(userUpdateSuccess(response.data));
+                dispatch(userUpdateSuccess(response.data, "password"));
                 return response;
             })
             .catch(error => {
-                dispatch(userUpdateFail(error))
+                dispatch(userUpdateFail(error, "password"))
+            });
+    }
+}
+
+export const adminUpdateUserInfo = (userId, userInfo, token) => {
+    return dispatch => {
+        dispatch(userUpdateStart());
+
+        const config = {
+            headers: { Authorization: `Bearer ${token}` },
+            transformResponse: (data) => {
+                return JSONbigString.parse(data)
+            }
+        };
+
+        const payload = {
+            full_name: userInfo.full_name,
+            username: userInfo.username,
+            email: userInfo.email
+        }
+        
+        axios.put(urls.adminUsersURL + "/" + userId, payload, config)
+            .then(response => {
+                dispatch(userUpdateSuccess(response.data, "userInfo"));
+                return response;
+            })
+            .catch(error => {
+                dispatch(userUpdateFail(error, "updateUserInfo"))
             });
     }
 }

@@ -17,14 +17,65 @@ import { Button } from 'react-bootstrap';
 class User extends Component {
 
     state = {
-        controls: {
+        passwordResetControls: {
             password: false,
             passwordAgain: false
+        },
+        updateUserControls: {
+            full_name: this.props.userInfo.full_name !== "" && this.props.userInfo.full_name !== undefined,
+            username: this.props.userInfo.username !== "" && this.props.userInfo.username !== undefined,
+            email: this.props.userInfo.email !== "" && this.props.userInfo.email !== undefined
         },
         deleteUserForm: {
             value: "",
             valid: false,
             touched: false
+        },
+        updateUserInfoForm: {
+            fullName: {
+                elementType: 'input',
+                label: "Full Name",
+                elementConfig: {
+                    type: "text"
+                },
+                value: this.props.userInfo.full_name,
+                validation: {
+                    required: true,
+                    minLength: 3,
+                    maxLength: 64
+                },
+                touched: false,
+                valid: this.props.userInfo.full_name !== "" && this.props.userInfo.full_name !== undefined
+            },
+            username: {
+                elementType: 'input',
+                label: "Username",
+                elementConfig: {
+                    type: "text"
+                },
+                value: this.props.userInfo.username,
+                validation: {
+                    required: true,
+                    minLength: 1,
+                    maxLength: 256
+                },
+                touched: false,
+                valid: this.props.userInfo.username !== "" && this.props.userInfo.username !== undefined
+            },
+            email: {
+                elementType: 'input',
+                label: "Email address",
+                elementConfig: {
+                    type: "email"
+                },
+                value: this.props.userInfo.email,
+                validation: {
+                    required: true,
+                    isEmail: true
+                },
+                touched: false,
+                valid: this.props.userInfo.email !== "" && this.props.userInfo.email !== undefined
+            }
         },
         passwordResetForm: {
             password: {
@@ -65,6 +116,25 @@ class User extends Component {
         }
     }
 
+    userInfoInputChangedHandler = (event, id) => {
+        let value = event.target.value
+
+        const updatedUserProfileForm = cloneDeep(this.state.updateUserInfoForm)
+        updatedUserProfileForm[id].value = value
+
+        let isValid = checkValidity(
+            updatedUserProfileForm[id].value, updatedUserProfileForm[id].validation)
+
+        updatedUserProfileForm[id].valid = isValid
+        updatedUserProfileForm[id].touched = true
+
+        let updatedControls = cloneDeep(this.state.updateUserControls)
+        updatedControls[id] = updatedUserProfileForm[id].valid
+
+        this.setState({updateUserControls: updatedControls})
+        this.setState({updateUserInfoForm: updatedUserProfileForm})
+    }
+
     inputChangedHandler = (event, id) => {
         let value = event.target.value
 
@@ -83,10 +153,10 @@ class User extends Component {
         updatedUserProfileForm[id].valid = isValid
         updatedUserProfileForm[id].touched = true
 
-        let updatedControls = cloneDeep(this.state.controls)
+        let updatedControls = cloneDeep(this.state.passwordResetControls)
         updatedControls[id] = updatedUserProfileForm[id].valid
 
-        this.setState({controls: updatedControls})
+        this.setState({passwordResetControls: updatedControls})
         this.setState({passwordResetForm: updatedUserProfileForm})
     }
 
@@ -103,6 +173,20 @@ class User extends Component {
         this.setState(newState)
     }
 
+    updateUserInfoSubmitHandler = (event) => {
+        event.preventDefault()
+
+        let userInfo = {
+            full_name: this.state.updateUserInfoForm.fullName.value,
+            username: this.state.updateUserInfoForm.username.value,
+            email: this.state.updateUserInfoForm.email.value
+        }
+        this.props.onAdminUpdateUserInfo(
+            this.props.userInfo.id,
+            userInfo,
+            this.props.token)
+    }
+
     deleteUserSubmitHandler = (event) => {
         event.preventDefault()
         this.props.onUserDelete(this.props.userInfo.id, this.props.token)
@@ -117,6 +201,22 @@ class User extends Component {
         this.setState({deleteUserForm: {valid: valid, touched: true, value: newVal}})
     }
 
+    formatError = (error) => {
+        let err = null;
+        if (error) {
+            let parsedMsg = JSON.parse(error.request.response)
+            err = <p>Request returned an error: <span className={classes.HighlightetdID}>{parsedMsg.details}</span></p>
+        }
+        return err
+    }
+    getUserInfoUpdateError = () => {
+        return this.formatError(this.props.updateUserInfoError)
+    }
+
+    getPasswordResetError = () => {
+        return this.formatError(this.props.passwordUpdateError)
+    }
+
     render() {
         if (!this.props.isAuthenticated) {
             return <Redirect to="/login" />
@@ -127,33 +227,70 @@ class User extends Component {
             return <Redirect to={userURL} />
         }
 
-        let elems = [];
+        let passwordResetElems = [];
         for (let elem in this.state.passwordResetForm) {
-            elems.push({
+            passwordResetElems.push({
                 id: elem,
                 config: this.state.passwordResetForm[elem]
             });
         }
 
+        let updateUserElems = [];
+        for (let elem in this.state.updateUserInfoForm) {
+            let inputElem = {
+                id: elem,
+                config: this.state.updateUserInfoForm[elem]
+            }
+            if (elem === "username" && this.props.usernameIsSet === true) {
+                inputElem.config.elementConfig.readOnly = true
+            }
+            updateUserElems.push(inputElem);
+        }
+
         let content = <Spinner/>
 
         if (!this.props.loading) {
-            let canSubmit = Object.values(this.state.controls).every(val => val === true)
-            let error = null;
-            if (this.props.error) {
-                let parsedMsg = JSON.parse(this.props.error.request.response)
-                error = <p>{parsedMsg.details}</p>
-            }
+            let canSubmitPasswordReset = Object.values(this.state.passwordResetControls).every(val => val === true)
+            let canSubmitUpdateUserInfo = Object.values(this.state.updateUserControls).every(val => val === true)
             content = (
                 <div className={classes.UserProfileContainer}>
                     <div className={classes.ProfileHeader}>
                         <span className={classes.PageTitle}>User profile for {this.props.userInfo.full_name} ({this.props.userInfo.email})</span>
                     </div>
                     <div className={classes.PasswordReset}>
-                        <p>Reset password</p>
-                        {error}
+                        <p>Update user info</p>
+                        {this.getUserInfoUpdateError()}
+                        {/* <p>Error updating user:<span className={classes.HighlightetdID}>{error}</span></p> */}
                         {
-                            elems.map(
+                            updateUserElems.map(
+                                formElem => {
+                                    return (
+                                        <Input 
+                                            key={formElem.id}
+                                            changed={(event) => this.userInfoInputChangedHandler(event, formElem.id)}
+                                            elementType={formElem.config.elementType}
+                                            elementConfig={formElem.config.elementConfig}
+                                            value={formElem.config.value}
+                                            label={formElem.config.label}
+                                            invalid={!formElem.config.valid}
+                                            touched={formElem.config.touched}
+                                        />
+                                    )
+                                }
+                            )
+                        }
+                        <div style={{ marginTop: "10px", marginBottom: "5px"}}>
+                            <Button
+                                variant="primary"
+                                disabled={!canSubmitUpdateUserInfo}
+                                onClick={this.updateUserInfoSubmitHandler}>Update</Button>
+                        </div>
+                    </div>
+                    <div className={classes.PasswordReset}>
+                        <p>Reset password</p>
+                        {this.getPasswordResetError()}
+                        {
+                            passwordResetElems.map(
                                 formElem => {
                                     return (
                                         <Input 
@@ -172,7 +309,7 @@ class User extends Component {
                         <div style={{ marginTop: "10px", marginBottom: "5px"}}>
                             <Button
                                 variant="primary"
-                                disabled={!canSubmit}
+                                disabled={!canSubmitPasswordReset}
                                 onClick={this.submitHandler}>Change Password</Button>
                         </div>
                     </div>
@@ -210,14 +347,18 @@ const mapDispatchToProps = dispatch => {
         onUserGet: (userId, token) => dispatch(actions.getUser(userId, token)),
         onUserDelete: (userId, token) => dispatch(actions.deleteUser(userId, token)),
         onSetAuthRedirect: (path) => dispatch(actions.setAuthRedirectPath(path)),
-        onAdminUpdatePassword: (userId, password, token) => dispatch(actions.adminUpdateUserPassword(userId, password, token))
+        onAdminUpdatePassword: (userId, password, token) => dispatch(actions.adminUpdateUserPassword(userId, password, token)),
+        onAdminUpdateUserInfo: (userId, userInfo, token) => dispatch(actions.adminUpdateUserInfo(userId, userInfo, token))
     }
 }
 
 const mapStateToProps = state => {
     return {
         loading: state.userGet.loading,
+        usernameIsSet: state.userGet.hasUsername,
         error: state.userGet.error,
+        updateUserInfoError: state.userGet.updateUserInfoError,
+        passwordUpdateError: state.userGet.passwordUpdateError,
         userInfo: state.userGet.userInfo,
         token: state.auth.token,
         isAdmin: state.auth.isAdmin,

@@ -33,7 +33,8 @@ export {
     getUser,
     initUserGetState,
     userGetSuccess,
-    adminUpdateUserPassword
+    adminUpdateUserPassword,
+    adminUpdateUserInfo
 } from './adminUserGet';
 
 export {

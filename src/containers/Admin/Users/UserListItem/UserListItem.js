@@ -17,10 +17,14 @@ class UserListItem extends Component {
     }
 
     render () {
+        let username = <div>{this.props.userInfo.email}</div>
+        if (this.props.userInfo.username) {
+            username = <div>{this.props.userInfo.username} ({this.props.userInfo.email})</div>
+        }
         return (
             <div className={classes.UserListItem} onClick={this.onClickHandler}>
                 <div>{this.props.userInfo.full_name}</div>
-                <div>{this.props.userInfo.email}</div>
+                {username}
             </div>
         );
     }

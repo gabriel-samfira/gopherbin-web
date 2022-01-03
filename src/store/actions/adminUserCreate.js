@@ -45,6 +45,7 @@ export const createUser = (userCreateInfo, token) => {
         
         let payload = {
             full_name: userCreateInfo.fullName,
+            username: userCreateInfo.username,
             email: userCreateInfo.email,
             password: userCreateInfo.password,
             enabled: userCreateInfo.enabled

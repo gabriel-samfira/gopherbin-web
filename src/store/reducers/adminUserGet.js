@@ -3,8 +3,11 @@ import { cloneDeep } from 'lodash';
 
 let initialState = {
     loading: false,
+    hasUsername: false,
     userInfo: {},
     error: null,
+    updateUserInfoError: null,
+    passwordUpdateError: null,
     deleted: false
 };
 
@@ -18,6 +21,7 @@ const userGetStart = (state, action) => {
 const userGetSuccess = (state, action) => {
     state.loading = false
     state.userInfo = action.userInfo
+    state.hasUsername = action.userInfo.username !== undefined && action.userInfo.username !== ""
     state.error = null
     state.deleted = false
     return state
@@ -49,11 +53,15 @@ const userUpdateSuccess = (state, action) => {
     state.loading = false
     state.error = null
     state.userInfo = action.userInfo
+    state.hasUsername = action.userInfo.username !== undefined && action.userInfo.username !== ""
     return state
 }
 
 const userUpdateFail = (state, action) => {
+    state.updateUserError = action.updateUserError
     state.error = action.error
+    state.passwordUpdateError = action.passwordUpdateError
+    state.updateUserInfoError = action.updateUserInfoError
     state.loading = false
     return state
 }

@@ -37,6 +37,21 @@ class NewUser extends Component {
                     value: '',
                     validation: {
                         required: true,
+                        minLength: 3,
+                        maxLength: 64
+                    },
+                    touched: false,
+                    valid: false
+                },
+                username: {
+                    elementType: 'input',
+                    elementConfig: {
+                        type: "text",
+                        placeholder: "username"
+                    },
+                    value: '',
+                    validation: {
+                        required: true,
                         minLength: 1,
                         maxLength: 256
                     },
@@ -151,6 +166,7 @@ class NewUser extends Component {
         event.preventDefault();
         let userInfo = {
             fullName: this.state.newUserForm.fullName.value,
+            username: this.state.newUserForm.username.value,
             email: this.state.newUserForm.email.value,
             password: this.state.newUserForm.password.value,
             enabled: this.state.newUserForm.enabled.value
@@ -238,6 +254,7 @@ class NewUser extends Component {
                         <Button
                             variant="primary"
                             disabled={!canSubmit}
+                            type="submit"
                             onClick={this.submitHandler}>Submit</Button>
                     </div>
                 </div>
