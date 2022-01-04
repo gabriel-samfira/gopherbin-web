@@ -6,7 +6,7 @@ import AceEditor from "react-ace";
 import 'ace-builds/webpack-resolver';
 import copy from "copy-to-clipboard";
 
-import { Trash, Clipboard, ClipboardCheck } from 'react-bootstrap-icons';
+import { Trash, Clipboard, ClipboardCheck, Share } from 'react-bootstrap-icons';
 
 import PrivacySlider from '../../../components/UI/PrivacySlider/PrivacySlider';
 
@@ -44,11 +44,10 @@ class PastePreview extends Component {
         let url = this.getPasteURL();
         copy(base_url + url);
         this.toggleCopiedState();
-        setTimeout(this.toggleCopiedState, 2000);
+        setTimeout(this.toggleCopiedState, 1000);
     }
 
     render() {
-        // console.log(window.location.href);
         let contents = decode(this.props.pasteData.preview)
         let contentsSplit = contents.split("\n")
         if (contentsSplit.length > 10) {
@@ -89,6 +88,12 @@ class PastePreview extends Component {
                                 key={sliderKey}
                                 value={this.props.pasteData.public}
                                 changed={this.props.onUpdatePaste}/>
+                            <div 
+                                className={classes.ControlIcon}
+                                onClick={this.props.onSharePaste}
+                                title="Sharing">
+                                <Share/>
+                            </div>
                             <div 
                                 className={clipboardClasses.join(" ")}
                                 onClick={this.onClipboardClickedHandler}

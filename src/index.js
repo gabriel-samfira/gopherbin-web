@@ -16,6 +16,7 @@ import addPasteReducer from './store/reducers/paste';
 import getPasteReducer from './store/reducers/pasteGet';
 import getPublicPasteReducer from './store/reducers/publicPasteGet';
 import listPasteReducer from './store/reducers/pasteList';
+import listPasteSharesReducer from './store/reducers/pasteShare';
 import adminUsersReducer from './store/reducers/adminUsers';
 import adminUserCreateReducer from './store/reducers/adminUserCreate';
 import adminUserGetReducer from './store/reducers/adminUserGet';
@@ -33,7 +34,8 @@ const rootReducer = combineReducers({
     listPastes: listPasteReducer,
     users: adminUsersReducer,
     userCreate: adminUserCreateReducer,
-    userGet: adminUserGetReducer
+    userGet: adminUserGetReducer,
+    pasteShares: listPasteSharesReducer
 });
 
 const store = createStore(

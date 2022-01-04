@@ -14,3 +14,65 @@
     margin: 15px;
     font-weight: bold;
 }
+
+.ModalContainer {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.ModalControls {
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+}
+
+.AddShareContainer {
+    margin-bottom: 15px;
+    margin-right: 15px;
+    width: 100%;
+}
+
+.AddShareInput {
+    /* margin-bottom: 15px;
+    margin-right: 15px; */
+    width: 100%;
+    padding: .280rem;
+}
+
+.HighlightetdID {
+    font-weight: bold;
+    color: #ff0000;
+}
+
+.ControlIcon {
+    display: inline-block;
+    min-width: 32px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    transition: color .2s, border .2s;
+    margin-left: 5px;
+    margin-right: 5px;
+    /* align-content:; */
+    /* width: 100%; */
+}
+
+.ControlIcon:hover {
+    color: rgb(0, 0, 0);
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.ControlIcon.ControlIconClicked {
+    color: #198754;
+    border: 1px solid #198754;
+}
+
+.ControlIconClicked:hover {
+    color: #198754;
+    border: 1px solid #198754;
+}
+
+.PasteDeleteIcon:hover {
+    color: rgb(248, 80, 80);
+    border: 1px solid rgb(248, 80, 80);
+}

@@ -80,7 +80,6 @@ class NewPaste extends Component {
     }
 
     toggleIsPublic = (event) => {
-        console.log(event.target);
         this.setState(
             (prevState) => {
                 return {isPublic: !prevState.isPublic};

@@ -42,3 +42,17 @@ export {
     createUser
 } from './adminUserCreate';
 
+export {
+    initPasteShareList,
+    pasteShareListStart,
+    pasteShareListSuccess,
+    pasteShareListFail,
+    listPasteShares,
+    pasteShareDeleteStart,
+    pasteShareDeleteFail,
+    deletePasteShare,
+    pasteShareAddStart,
+    pasteShareAddSuccess,
+    pasteShareAddFail,
+    addPasteShare
+} from './pasteShare';

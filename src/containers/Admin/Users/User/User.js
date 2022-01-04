@@ -260,12 +260,11 @@ class User extends Component {
                     <div className={classes.PasswordReset}>
                         <p>Update user info</p>
                         {this.getUserInfoUpdateError()}
-                        {/* <p>Error updating user:<span className={classes.HighlightetdID}>{error}</span></p> */}
                         {
                             updateUserElems.map(
                                 formElem => {
                                     return (
-                                        <Input 
+                                        <Input
                                             key={formElem.id}
                                             changed={(event) => this.userInfoInputChangedHandler(event, formElem.id)}
                                             elementType={formElem.config.elementType}

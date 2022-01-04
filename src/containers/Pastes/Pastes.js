@@ -6,8 +6,9 @@ import { Button } from 'react-bootstrap';
 
 import *  as actions from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import Modal from '../../components/UI/Modal/Modal';
 import PastePreview from './PastePreview/PastePreview';
+import DeletePasteModal from './Paste/DeletePaste';
+import SharePasteModal from './Paste/SharePasteModal';
 
 import classes from './Pastes.module.css';
 import './Pastes.css';
@@ -16,7 +17,8 @@ import './Pastes.css';
 class Pastes extends Component {
 
     state = {
-        deletingPaste: null
+        deletingPaste: null,
+        sharingPaste: null
     }
 
     componentDidMount() {
@@ -56,9 +58,19 @@ class Pastes extends Component {
         this.setState({ deletingPaste: null });
     }
 
+    shareCancelledHandler = () => {
+        this.props.onPasteShareCancel()
+    }
+
+
     onDeleteInitHandler = (pasteID) => {
         this.setState({deletingPaste: pasteID})
     }
+
+    onShareInitHandler = (pasteInfo) => {
+        this.props.onPasteShareList(pasteInfo.pasteID, pasteInfo.pasteName, this.props.token)
+    }
+
 
     render () {
         if (!this.props.isAuthenticated) {
@@ -99,6 +111,7 @@ class Pastes extends Component {
                                                 pasteData={paste}
                                                 key={paste.paste_id}
                                                 onDelete={() => this.onDeleteInitHandler({pasteID: paste.paste_id, pasteName: paste.name})}
+                                                onSharePaste={() => this.onShareInitHandler({pasteID: paste.paste_id, pasteName: paste.name})}
                                                 onUpdatePaste={() => {this.handleOnPasteUpdate(paste);}}
                                             />
                                 }
@@ -115,25 +128,20 @@ class Pastes extends Component {
                 );
             }
         }
-        let modal = null
-        if (this.state.deletingPaste !== null) {
-            modal = <Modal show={true} modalClosed={this.deleteCancelledHandler}>
-                <div className={classes.ConfirmDeleteContainer}>
-                    <p>Are you sure you want to delete <span className={classes.HighlightetdID}>{this.state.deletingPaste.pasteName}</span>?</p>
-                    <div className={classes.DeleteControls}>
-                        <div>
-                            <Button variant="outline-primary" onClick={this.deleteCancelledHandler}>CANCEL</Button>
-                        </div>
-                        <div>
-                            <Button variant="outline-danger" onClick={() => {this.handleOnPasteDelete(this.state.deletingPaste.pasteID)}}>DELETE</Button>
-                        </div>
-                    </div>
-                </div>
-            </Modal>
-        }
 
         return <React.Fragment>
-            {modal}
+            <DeletePasteModal
+                deletingPaste={this.state.deletingPaste}
+                onDeleteConfirm={this.handleOnPasteDelete}
+                onDeleteCancel={this.deleteCancelledHandler}
+            />
+            <SharePasteModal
+                sharingPaste={this.props.pasteShares}
+                onShareCancel={this.shareCancelledHandler}
+                onDelete={this.props.onDeletePasteShare}
+                onShareAdd={this.props.onAddPasteShare}
+                token={this.props.token}
+            />
             {contents}
         </React.Fragment>;
     }
@@ -146,7 +154,11 @@ const mapDispatchToProps = dispatch => {
         onListPastes: (page, maxResults, token) => dispatch(actions.listPastes(page, maxResults, token)),
         onSetAuthRedirect: (path) => dispatch(actions.setAuthRedirectPath(path)),
         onPasteDelete: (pasteID, token) => dispatch(actions.deletePaste(pasteID, token)),
-        onPasteUpdate: (pasteID, pasteData, token) => dispatch(actions.updatePaste(pasteID, pasteData, token))
+        onPasteUpdate: (pasteID, pasteData, token) => dispatch(actions.updatePaste(pasteID, pasteData, token)),
+        onPasteShareList: (pasteID, pasteName, token) => dispatch(actions.listPasteShares(pasteID, pasteName, token)),
+        onPasteShareCancel: () => dispatch(actions.initPasteShareList()),
+        onDeletePasteShare: (pasteID, userID, token) => dispatch(actions.deletePasteShare(pasteID, userID, token)),
+        onAddPasteShare: (pasteID, userID, token) => dispatch(actions.addPasteShare(pasteID, userID, token))
     }
 }
 
@@ -160,7 +172,8 @@ const mapStateToProps = state => {
         maxResults: state.listPastes.maxResults,
         totalPages: state.listPastes.totalPages,
         pastes: state.listPastes.pastes,
-        nestedPastes: state.listPastes.pastes.pastes
+        nestedPastes: state.listPastes.pastes.pastes,
+        pasteShares: state.pasteShares
     }
 }
 

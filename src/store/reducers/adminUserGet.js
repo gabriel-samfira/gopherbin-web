@@ -52,6 +52,8 @@ const userUpdateStart = (state, action) => {
 const userUpdateSuccess = (state, action) => {
     state.loading = false
     state.error = null
+    state.passwordUpdateError = null
+    state.updateUserInfoError = null
     state.userInfo = action.userInfo
     state.hasUsername = action.userInfo.username !== undefined && action.userInfo.username !== ""
     return state

@@ -57,11 +57,15 @@ class Paste extends Component {
         } else if (this.props.pasteData !== null) {
             const pasteContents = decode(this.props.pasteData.data)
             const syntax = this.props.pasteData.language
+            let createdBy = null
+            if (this.props.pasteData.created_by) {
+                createdBy = <span>by <strong>{this.props.pasteData.created_by}</strong></span>
+            }
             contents = (
                 <div className={classes.Paste}>
                     <div className={classes.PasteInfo}>
                         <h2>{this.props.pasteData.name}</h2>
-                        <p>Created <Moment fromNow>{this.props.pasteData.created_at}</Moment> </p>
+                        <p>Created {createdBy} <Moment fromNow>{this.props.pasteData.created_at}</Moment> </p>
                         <Button variant="secondary" ref={this.target} onClick={
                             () => {
                                 copy(pasteContents)
