@@ -68,9 +68,15 @@ class SharePasteModal extends Component {
         }
 
         let inputHasContents = this.state.shareContents !== ""
+        let error = null
+        if (this.props.sharingPaste.error) {
+            error = this.props.sharingPaste.error.message
+        }
+
         return <Modal show={true} modalClosed={this.props.onShareCancel}>
             <div className={classes.ModalContainer}>
                 <p>Sharing information for <span className={classes.HighlightetdID}>{this.props.sharingPaste.pasteName}</span></p>
+                {error}
                 <div className={classes.ModalControls}>
                     <div className={classes.AddShareContainer}>
                         <input

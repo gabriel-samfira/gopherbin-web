@@ -67,7 +67,7 @@ const pasteShareDeleteFail = (state, action) => {
     return state
 }
 
-//
+// Add paste share
 
 const pasteShareAddStart = (state, action) => {
     state.loading = true
@@ -76,7 +76,16 @@ const pasteShareAddStart = (state, action) => {
 
 const pasteShareAddSuccess = (state, action) => {
     state.loading = false
-    state.shares.push(action.shareData)
+    let found = false
+    for (let share in state.shares) {
+        if (state.shares[share].username === action.shareData.username) {
+            found = true
+            break
+        } 
+    }
+    if (!found) {
+        state.shares.push(action.shareData)
+    }
     state.error = null
     return state
 }
