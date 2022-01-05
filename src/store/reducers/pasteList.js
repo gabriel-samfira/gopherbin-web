@@ -31,7 +31,7 @@ const pasteListFail = (state, action) => {
     state.error = action.error
     state.pastes = {}
     state.page = 1
-    state.maxResults = 50
+    state.maxResults = 10
     state.totalPages = 1
     return state
 }
@@ -41,7 +41,7 @@ const pasteListReset = (state, action) => {
     state.loading = false;
     state.error = null;
     state.page = 1
-    state.maxResults = 50
+    state.maxResults = 10
     state.totalPages = 1
     return state
 }
