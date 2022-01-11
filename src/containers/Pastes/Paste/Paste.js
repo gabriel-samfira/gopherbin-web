@@ -10,6 +10,7 @@ import 'ace-builds/webpack-resolver';
 import { resolveSyntax } from '../pasteConstants';
 import *  as actions from '../../../store/actions/index';
 import classes from './Paste.module.css';
+import { editorTheme } from '../../../utils/utils';
 
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import { defaultEditorTheme } from '../pasteConstants';
@@ -85,7 +86,7 @@ class Paste extends Component {
                     </div>
                     <AceEditor
                         mode={resolveSyntax(syntax)}
-                        theme={defaultEditorTheme}
+                        theme={editorTheme(defaultEditorTheme)["value"]}
                         name="paste-data"
                         width="100%"
                         fontSize="inherit"

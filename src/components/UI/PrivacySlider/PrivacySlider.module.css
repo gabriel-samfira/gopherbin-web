@@ -1,9 +1,7 @@
 .switch {
     position: relative;
-    display: inline-block;
     width: 90px;
     height: 24px;
-    margin: 10px;
   }
   
 .switch input { 
@@ -19,7 +17,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #6cc7ac;
+    background-color: #28a745;
     -webkit-transition: .4s;
     transition: .4s;
 }

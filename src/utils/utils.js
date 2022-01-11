@@ -26,3 +26,19 @@ export const checkValidity = (value, rules) => {
     isValid = validationResults.every(val => val === true)
     return isValid;
 }
+
+export const editorTheme = (defaultEditorTheme) => {
+    let theme = localStorage.getItem('editorTheme')
+    let defaultTheme = {
+        value: defaultEditorTheme,
+        label: defaultEditorTheme.replaceAll("_", " ")
+    }
+    if (!theme) {
+        return defaultTheme
+    }
+    try {
+        return JSON.parse(theme)
+    } catch {
+        return defaultTheme
+    }
+}

@@ -5,13 +5,15 @@ import { Redirect } from 'react-router-dom';
 
 import *  as actions from '../../../store/actions/index'
 
-import { checkValidity } from '../../../utils/utils';
-import classes from './NewPaste.module.css'
+import { editorTheme } from '../../../utils/utils';
+import DatePicker from "react-datepicker";
+import Select from 'react-select'
+import classes from './NewPaste.module.css';
+import inputClasses from '../../../components/UI/Input/Input.module.css';
 import './NewPaste.css'
 
-import { editorModes, defaultEditorTheme } from '../pasteConstants';
+import { editorThemes, defaultEditorTheme, extensionToLanguage, fallbackEditorMode } from '../pasteConstants';
 
-import Input from '../../../components/UI/Input/Input';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import PrivacySlider from '../../../components/UI/PrivacySlider/PrivacySlider';
 
@@ -29,54 +31,33 @@ class NewPaste extends Component {
             pasteData: false
         },
         editor: {
-            theme: defaultEditorTheme,
+            theme: editorTheme(defaultEditorTheme)["value"],
             contents: ""
         },
         isPublic: false,
-        pasteForm: {
-            title: {
-                elementType: 'input',
-                elementConfig: {
-                    type: "text",
-                    placeholder: "Title"
-                },
-                value: '',
-                validation: {
-                    required: true,
-                    minLength: 1,
-                    maxLength: 256
-                },
-                touched: false,
-                valid: false
-            },
-            expires: {
-                elementType: 'date-picker',
-                elementConfig: {
-                    placeholder: "Expires...",
-                    // locale: "ro",
-                    minDate: (new Date(new Date().setDate((new Date()).getDate() + 1)))
-                },
-                value: '',
-                validation: {},
-                touched: false,
-                valid: true
-            },
-            syntax: {
-                elementType: 'select-seachable',
-                elementConfig: {
-                    options: editorModes.map(lang => {
-                        return {
-                            value: lang,
-                            displayValue: lang
-                        }
-                    })
-                },
-                value: 'text',
-                validation: {},
-                touched: false,
-                valid: true
-            }
+        syntax: "text",
+        name: "",
+        description: "",
+        expires: null,
+    }
+
+    onChangeThemeHandler = (event) => {
+        let defaultTheme = JSON.stringify({
+            value: defaultEditorTheme,
+            label: defaultEditorTheme.replaceAll("_", " ")
+        })
+
+        let theme = defaultTheme
+        try {
+            theme = JSON.stringify(event)
+        } catch {
+            console.log("invalid theme")
         }
+        localStorage.setItem('editorTheme', theme)
+
+        let editor = cloneDeep(this.state.editor)
+        editor.theme = event.value
+        this.setState({editor: editor})
     }
 
     toggleIsPublic = (event) => {
@@ -87,41 +68,21 @@ class NewPaste extends Component {
         )
     }
 
-    inputChangedHandler = (event, id) => {
-        if (event === null || event === undefined) {
-            return
+    onTitleChanged = (event) => {
+        let value = event.target.value
+        let syntax = fallbackEditorMode
+        if (value.length > 1 && value.includes(".")) {
+            var fileExt = value.split('.').pop();
+            syntax = extensionToLanguage[fileExt]
+            if (syntax === undefined) {
+                syntax = fallbackEditorMode
+            }
         }
-        let target = event.target
-        let value = null
+        this.setState({name: value, syntax: syntax})
+    }
 
-        switch(target) {
-            case (undefined):
-            case (null):
-                if (Array.isArray(event)) {
-                    value = event[0]
-                } else {
-                    value = event
-                }
-                break;
-            default:
-                if (target.type === 'checkbox') {
-                    value = target.checked
-                } else {
-                    value = target.value
-                }
-        }
-
-        const updatedPasteForm = cloneDeep(this.state.pasteForm)
-        updatedPasteForm[id].value = value
-        updatedPasteForm[id].valid = checkValidity(
-            updatedPasteForm[id].value, updatedPasteForm[id].validation)
-        updatedPasteForm[id].touched = true
-
-        let updatedControls = cloneDeep(this.state.controls)
-        updatedControls[id] = updatedPasteForm[id].valid
-
-        this.setState({controls: updatedControls})
-        this.setState({pasteForm: updatedPasteForm})
+    onExpiresChangedHandler = (event) => {
+        this.setState({expires: event})
     }
 
     editorDataChangedHandler = (data) => {
@@ -137,15 +98,15 @@ class NewPaste extends Component {
     submitHandler = (event) => {
         event.preventDefault();
         let pasteData = {
-            title: this.state.pasteForm.title.value,
+            title: this.state.name,
             isPublic: this.state.isPublic,
-            lang: this.state.pasteForm.syntax.value,
+            lang: this.state.syntax,
             data: this.state.editor.contents
         }
 
-        if (this.state.pasteForm.expires.value) {
-            let offset = this.state.pasteForm.expires.value.getTimezoneOffset()
-            let expires = new Date(this.state.pasteForm.expires.value.getTime() + (-(offset * 60000)))
+        if (this.state.expires) {
+            let offset = this.state.expires.getTimezoneOffset()
+            let expires = new Date(this.state.expires.getTime() + (-(offset * 60000)))
             pasteData.expires = expires
         }
         this.props.onCreatePaste(pasteData, this.props.token)
@@ -158,6 +119,10 @@ class NewPaste extends Component {
             this.props.onSetAuthRedirect(this.props.match.url)
             this.props.history.push('/login')
         }
+    }
+
+    canSubmit = () => {
+        return this.state.name.length > 0 && this.state.editor.contents.length > 0
     }
 
     render() {
@@ -174,50 +139,91 @@ class NewPaste extends Component {
             return <Redirect to={pasteURL} />
         }
 
-        let elems = [];
-        for (let elem in this.state.pasteForm) {
-            elems.push({
-                id: elem,
-                config: this.state.pasteForm[elem]
-            });
-        }
+        let options = editorThemes.map(
+            option => {
+                return {value: option, label: option.replaceAll("_", " ")}
+            }
+        )
 
-        let canSubmit = Object.values(this.state.controls).every(val => val === true)
+        const customStyles = {
+            control: (provided, state) => ({
+                ...provided,
+                background: '#fff',
+                borderColor: '#9e9e9e',
+                minHeight: '28px',
+                height: '28px',
+                boxShadow: state.isFocused ? null : null,
+            }),
 
+            valueContainer: (provided, state) => ({
+                ...provided,
+                height: '28px',
+                padding: '0 6px',
+            }),
+
+            singleValue: (provided, state) => ({
+                ...provided,
+                overflow: "unset",
+                }),
+
+            input: (provided, state) => ({
+                ...provided,
+                margin: '0px',
+            }),
+            indicatorSeparator: state => ({
+                display: 'none',
+            }),
+            indicatorsContainer: (provided, state) => ({
+                ...provided,
+                height: '28px',
+            }),
+        };
         if (!this.props.loading) {
             contents = (
                 <div className={classes.NewPaste}>
-                    {
-                        elems.map(
-                            formElem => {
-                                return (
-                                    <Input 
-                                        key={formElem.id}
-                                        changed={(event) => this.inputChangedHandler(event, formElem.id)}
-                                        elementType={formElem.config.elementType}
-                                        elementConfig={formElem.config.elementConfig}
-                                        value={formElem.config.value}
-                                        invalid={!formElem.config.valid}
-                                        touched={formElem.config.touched}
-                                        label={formElem.config.label}
-                                        id={formElem.id}
-                                    />
-                                )
-                            }
-                        )
-                    }
-                    <PrivacySlider
-                                changed={this.toggleIsPublic}
-                                value={this.state.isPublic}/>
-
                     <div className={classes.EditorContainer}>
+                        <div className={classes.Controls}>
+                            <div className={classes.LeftContainer}>
+                                <input
+                                    className={[inputClasses.InputElement, classes.PasteName].join(" ")}
+                                    value={this.state.name}
+                                    onChange={this.onTitleChanged}
+                                    placeholder="File name with extension (eg: mylog.log)"
+                                />
+                            </div>
+                            <div className={classes.RightContainer}>
+                                <div className={classes.RightContainerElement}>
+                                    <PrivacySlider
+                                                changed={this.toggleIsPublic}
+                                                value={this.state.isPublic}/>
+                                </div>
+                                <div className={classes.RightContainerElement}>
+                                    <Select
+                                        options={options}
+                                        styles={customStyles}
+                                        className={classes.DropDown}
+                                        placeholder="Editor Theme"
+                                        value={editorTheme(defaultEditorTheme)}
+                                        onChange={this.onChangeThemeHandler}
+                                    />
+                                </div>
+                                <div className={classes.RightContainerElement}>
+                                    <DatePicker
+                                        placeholderText="Expires..."
+                                        onChange={this.onExpiresChangedHandler}
+                                        selected={this.state.expires}
+                                        minDate={(new Date(new Date().setDate((new Date()).getDate() + 1)))}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                         <AceEditor
-                            mode={this.state.pasteForm.syntax.value}
+                            mode={this.state.syntax}
                             theme={this.state.editor.theme}
                             onChange={this.editorDataChangedHandler}
                             name="paste-data"
                             width="inherit"
-                            height="inherit"
+                            height="100%"
                             fontSize="100%"
                             value={this.state.editor.contents}
                             showPrintMargin={false}
@@ -228,8 +234,8 @@ class NewPaste extends Component {
                             }}
                         />
                     </div>
-                    <div style={{marginTop: "20px"}}>
-                        <Button type="submit" variant="primary" disabled={!canSubmit} onClick={this.submitHandler}>Submit</Button>
+                    <div style={{marginTop: "10px"}}>
+                        <Button type="submit" variant="success" disabled={!this.canSubmit()} onClick={this.submitHandler}>Submit</Button>
                     </div>
                 </div>
             );

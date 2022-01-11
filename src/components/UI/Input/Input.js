@@ -1,5 +1,4 @@
 import React from 'react';
-import SelectSearch from 'react-select-search';
 import AceEditor from "react-ace";
 
 import DatePicker from "react-datepicker";
@@ -76,24 +75,6 @@ const input = (props) => {
                     {...props.elementConfig}
                     value={props.value}
                     onChange={props.changed} />);
-            break;
-        case ('select-seachable'):
-            let searchableOptions = props.elementConfig.options.map(
-                opt => {
-                    return {
-                        value: opt.value,
-                        name: capitalizeFirstLetter(opt.displayValue).replace("_", " ")
-                    }
-                }
-            );
-            inputEl = (
-                <SelectSearch
-                    id={props.id}
-                    onChange={props.changed}
-                    // className={inputClasses.join(' ')}
-                    value={props.value}
-                    search
-                    options={searchableOptions}/>);
             break;
         case ('select'):
                 let options = props.elementConfig.options.map(

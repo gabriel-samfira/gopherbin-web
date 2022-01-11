@@ -6,6 +6,7 @@ import { Trash } from 'react-bootstrap-icons';
 
 import Modal from '../../../components/UI/Modal/Modal';
 import classes from './Paste.module.css';
+import inputClasses from '../../../components/UI/Input/Input.module.css';
 
 
 class SharePasteModal extends Component {
@@ -80,7 +81,7 @@ class SharePasteModal extends Component {
                 <div className={classes.ModalControls}>
                     <div className={classes.AddShareContainer}>
                         <input
-                            className={classes.AddShareInput}
+                            className={[classes.AddShareInput, inputClasses.InputElement].join(" ")}
                             value={this.state.shareContents}
                             onChange={this.onShareInputChanged}
                             onKeyDown={this.onKeyDown}
@@ -88,7 +89,7 @@ class SharePasteModal extends Component {
                     </div>
                     <div>
                         <Button
-                            variant="primary"
+                            variant="success"
                             type="submit"
                             onClick={this.onShareSubmit}
                             disabled={!inputHasContents}
@@ -100,7 +101,7 @@ class SharePasteModal extends Component {
                 </div>
                 <div className={classes.ModalControls}>
                     <div>
-                        <Button variant="primary" onClick={this.props.onShareCancel}>Close</Button>
+                        <Button variant="success" onClick={this.props.onShareCancel}>Close</Button>
                     </div>
                 </div>
             </div>

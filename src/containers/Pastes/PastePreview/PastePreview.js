@@ -7,6 +7,7 @@ import 'ace-builds/webpack-resolver';
 import copy from "copy-to-clipboard";
 
 import { Trash, Clipboard, ClipboardCheck, Share } from 'react-bootstrap-icons';
+import { editorTheme } from '../../../utils/utils';
 
 import PrivacySlider from '../../../components/UI/PrivacySlider/PrivacySlider';
 
@@ -75,6 +76,7 @@ class PastePreview extends Component {
             clipboardClasses.push(classes.ControlIconClicked)
             clipboardIcon = <ClipboardCheck/>
         }
+        console.log(editorTheme(defaultEditorTheme)["value"])
         return (
             <div className={classes.PastePreview}>
                 <div className={classes.PasteInfoContainer}>
@@ -84,10 +86,12 @@ class PastePreview extends Component {
                         </div>
 
                         <div>
-                            <PrivacySlider
-                                key={sliderKey}
-                                value={this.props.pasteData.public}
-                                changed={this.props.onUpdatePaste}/>
+                            <div style={{display: "inline-block"}}>
+                                <PrivacySlider
+                                    key={sliderKey}
+                                    value={this.props.pasteData.public}
+                                    changed={this.props.onUpdatePaste}/>
+                            </div>
                             <div 
                                 className={classes.ControlIcon}
                                 onClick={this.props.onSharePaste}
@@ -116,7 +120,7 @@ class PastePreview extends Component {
                     <div className={classes.PreviewCover} onClick={this.onClickHandler} />
                     <AceEditor
                         mode={resolveSyntax(this.props.pasteData.language)}
-                        theme={defaultEditorTheme}
+                        theme={editorTheme(defaultEditorTheme)["value"]}
                         name="paste-preview"
                         width="100%"
                         fontSize="inherit"

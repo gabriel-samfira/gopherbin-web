@@ -1,10 +1,80 @@
 .NewPaste {
     width: 95%;
-    height: 100%;
+    height: 500px;
     box-sizing: border-box;
     margin: auto;
+    border-radius: 10px;
+    padding: 15px;
 }
 
+.DropDown {
+    width: 130px;
+    display: inline-block;
+    /* height: 28px; */
+}
+
+.EditorContainer {
+    width: 100%;
+    /* height: calc(100vh - 174px); */
+    height: 500px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.SliderContainer {
+    margin: 10px;
+    padding-top: 2px;
+}
+
+.ControlsElement {
+    margin: 10px;
+}
+
+.LeftContainer {
+    margin-left: 10px;
+}
+
+.RightContainer {
+    margin: 10px;
+    display: none;
+}
+
+.RightContainerElement {
+    margin: 5px;
+    display: inline-block;
+}
+
+.PasteName {
+    outline: none;
+    border: 1px solid #ccc;
+    background-color: white;
+    font: inherit;
+    padding: 6px 10px;
+    display: block;
+    width: 200px;
+    height: 28px;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+.Controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    background-color: #d4d9dd;
+}
+
+@media screen and (min-width: 360px) {
+    .NewPaste {
+        width: 350px;
+    }
+
+    .RightContainer {
+        display: none;
+    }
+}
 
 @media screen and (min-width: 600px) {
     .NewPaste {
@@ -15,6 +85,10 @@
 @media screen and (min-width: 800px) {
     .NewPaste {
         width: 790px;
+    }
+
+    .RightContainer {
+        display: inline-block;
     }
 }
 
@@ -28,12 +102,4 @@
     .NewPaste{
         width: 1280px;
     }
-}
-
-.EditorContainer {
-    width: 100%;
-    height: 500px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    overflow: hidden;
 }
