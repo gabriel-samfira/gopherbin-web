@@ -64,6 +64,7 @@
     ]
   },
   "devDependencies": {
+    "mini-css-extract-plugin": "2.4.5",
     "react-scripts": "^5.0.0",
     "webpack-bundle-analyzer": "^4.3.0"
   }
