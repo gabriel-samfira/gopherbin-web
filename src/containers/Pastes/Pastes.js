@@ -109,6 +109,7 @@ class Pastes extends Component {
                                 paste => {
                                     return <PastePreview
                                                 pasteData={paste}
+                                                token={this.props.token}
                                                 key={paste.paste_id}
                                                 onDelete={() => this.onDeleteInitHandler({pasteID: paste.paste_id, pasteName: paste.name})}
                                                 onSharePaste={() => this.onShareInitHandler({pasteID: paste.paste_id, pasteName: paste.name})}

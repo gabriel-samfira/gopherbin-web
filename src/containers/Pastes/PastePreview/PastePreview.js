@@ -5,9 +5,11 @@ import { withRouter } from 'react-router-dom';
 import AceEditor from "react-ace";
 import 'ace-builds/webpack-resolver';
 import copy from "copy-to-clipboard";
+import FileSaver from 'file-saver';
 
-import { Trash, Clipboard, ClipboardCheck, Share } from 'react-bootstrap-icons';
+import { Trash, Clipboard, ClipboardCheck, Share, Download } from 'react-bootstrap-icons';
 import { editorTheme } from '../../../utils/utils';
+import axios from '../../../axios';
 
 import PrivacySlider from '../../../components/UI/PrivacySlider/PrivacySlider';
 
@@ -48,6 +50,22 @@ class PastePreview extends Component {
         setTimeout(this.toggleCopiedState, 1000);
     }
 
+    onDownloadHandler = () => {
+        const config = {
+            headers: { Authorization: `Bearer ${this.props.token}` },
+            responseType: "blob"
+        };
+        let downloadURL = "/api/v1/paste/" + this.props.pasteData.paste_id + "/download"
+        axios.get(downloadURL, config)
+            .then(response => {
+                let fileName = response.headers["x-suggested-filename"]
+                FileSaver.saveAs(response.data, fileName);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
     render() {
         let contents = decode(this.props.pasteData.preview)
         let contentsSplit = contents.split("\n")
@@ -76,7 +94,7 @@ class PastePreview extends Component {
             clipboardClasses.push(classes.ControlIconClicked)
             clipboardIcon = <ClipboardCheck/>
         }
-        console.log(editorTheme(defaultEditorTheme)["value"])
+
         return (
             <div className={classes.PastePreview}>
                 <div className={classes.PasteInfoContainer}>
@@ -97,6 +115,12 @@ class PastePreview extends Component {
                                 onClick={this.props.onSharePaste}
                                 title="Sharing">
                                 <Share/>
+                            </div>
+                            <div 
+                                className={classes.ControlIcon}
+                                onClick={this.onDownloadHandler}
+                                title="Download">
+                                <Download/>
                             </div>
                             <div 
                                 className={clipboardClasses.join(" ")}
