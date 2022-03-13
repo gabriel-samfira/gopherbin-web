@@ -44,6 +44,7 @@ const store = createStore(
         applyMiddleware(thunk)
     ))
 
+const UNAUTHORIZED = 401;
 const CONFLICT = 409;
 axios.interceptors.response.use(
   response => response,
@@ -58,6 +59,12 @@ axios.interceptors.response.use(
     if (status === CONFLICT && msg === "init_required") {
         store.dispatch(logout());
     }
+
+    // token probably expired. Remove it form the store.
+    if (status === UNAUTHORIZED) {
+        store.dispatch(logout());
+    }
+
    return Promise.reject(error);
  }
 );
