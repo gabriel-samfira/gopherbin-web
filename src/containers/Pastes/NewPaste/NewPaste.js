@@ -223,7 +223,7 @@ class NewPaste extends Component {
                             onChange={this.editorDataChangedHandler}
                             name="paste-data"
                             width="inherit"
-                            height="100%"
+                            height="450px"
                             fontSize="100%"
                             value={this.state.editor.contents}
                             showPrintMargin={false}
